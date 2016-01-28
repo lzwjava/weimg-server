@@ -17,6 +17,7 @@ class User extends BaseController
     function __construct()
     {
         parent::__construct();
+        $this->load->model('userDao');
         $this->load->library('LeanCloud');
     }
 
@@ -67,14 +68,13 @@ class User extends BaseController
     public function register_post()
     {
         if ($this->checkIfParamsNotExist($_POST, array(KEY_USERNAME, KEY_MOBILE_PHONE_NUMBER,
-            KEY_PASSWORD, KEY_TYPE, KEY_SMS_CODE))
+            KEY_PASSWORD, KEY_SMS_CODE))
         ) {
             return;
         }
         $mobilePhoneNumber = $_POST[KEY_MOBILE_PHONE_NUMBER];
         $username = $_POST[KEY_USERNAME];
         $password = $_POST[KEY_PASSWORD];
-        $type = $_POST[KEY_TYPE];
         $smsCode = $_POST[KEY_SMS_CODE];
         if ($this->checkIfUsernameUsedAndReponse($username)) {
             return;
@@ -84,11 +84,9 @@ class User extends BaseController
             return;
         } else if ($this->checkIfWrongPasswordFormat($password)) {
             return;
-        } else if ($this->checkIfNotInArray($type, $this->getTypeArray())) {
-            return;
         } else {
             $defaultAvatarUrl = "http://7xotd0.com1.z0.glb.clouddn.com/android.png";
-            $this->userDao->insertUser($type, $username, $mobilePhoneNumber, $defaultAvatarUrl,
+            $this->userDao->insertUser($username, $mobilePhoneNumber, $defaultAvatarUrl,
                 $password);
             $this->loginOrRegisterSucceed($mobilePhoneNumber);
         }
@@ -120,11 +118,6 @@ class User extends BaseController
         }
     }
 
-    private function getTypeArray()
-    {
-        return array(TYPE_REVIEWER, TYPE_LEARNER);
-    }
-
     public function loginOrRegisterSucceed($mobilePhoneNumber)
     {
         $user = $this->userDao->updateSessionTokenIfNeeded($mobilePhoneNumber);
@@ -153,9 +146,7 @@ class User extends BaseController
 
     public function update_patch()
     {
-        $keys = array(KEY_AVATAR_URL, KEY_USERNAME,
-            KEY_INTRODUCTION, KEY_EXPERIENCE, KEY_GITHUB_USERNAME, KEY_JOB_TITLE, KEY_COMPANY,
-            KEY_MAX_ORDERS);
+        $keys = array(KEY_AVATAR_URL, KEY_USERNAME);
         if ($this->checkIfNotAtLeastOneParam($this->patch(), $keys)
         ) {
             return;
@@ -173,42 +164,8 @@ class User extends BaseController
                 }
             }
         }
-        if (isset($data[KEY_EXPERIENCE])) {
-            $experience = $data[KEY_EXPERIENCE];
-            if ($experience < 0 || $experience > 30) {
-                $this->failure(ERROR_PARAMETER_ILLEGAL, '工作经验年限应在 0~30 年');
-                return;
-            }
-        }
         $user = $this->userDao->updateUser($user, $data);
         $this->succeed($user);
     }
 
-    public function addTag_post()
-    {
-        if ($this->checkIfParamsNotExist($_POST, array(KEY_TAG_ID))) {
-            return;
-        }
-        $tagId = $_POST[KEY_TAG_ID];
-        $this->addOrRemoveTag(true, $tagId);
-    }
-
-    public function removeTag_delete($tagId)
-    {
-        $this->addOrRemoveTag(false, $tagId);
-    }
-
-    private function addOrRemoveTag($add, $tagId)
-    {
-        $user = $this->checkAndGetSessionUser();
-        if (!$user) {
-            return;
-        }
-        if ($add) {
-            $this->tagDao->addUserTag($user->id, $tagId);
-        } else {
-            $this->tagDao->removeUserTag($user->id, $tagId);
-        }
-        $this->succeed($this->tagDao->getUserTags($user->id));
-    }
 }

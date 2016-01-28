@@ -25,11 +25,11 @@ class UserDao extends BaseDao
         return $this->checkIfUserUsed(KEY_MOBILE_PHONE_NUMBER, $mobilePhoneNumber);
     }
 
-    function insertUser($type, $username, $mobilePhoneNumber, $avatarUrl, $password)
+    function insertUser($username, $mobilePhoneNumber, $avatarUrl, $password)
     {
 
         $data = array(
-            KEY_ID => $this->genId(),
+            KEY_USER_ID => $this->genId(),
             KEY_USERNAME => $username,
             KEY_PASSWORD => sha1($password),
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
@@ -37,8 +37,7 @@ class UserDao extends BaseDao
             KEY_SESSION_TOKEN => $this->genSessionToken()
         );
         $this->db->trans_start();
-        $tableName = $this->tableNameByType($type);
-        $this->db->insert($tableName, $data);
+        $this->db->insert(TABLE_USERS, $data);
         $this->db->trans_complete();
     }
 
@@ -52,19 +51,6 @@ class UserDao extends BaseDao
         return getToken(32);
     }
 
-    private function tableNameByType($type)
-    {
-        if ($type == TYPE_LEARNER) {
-            $tableName = TABLE_LEARNERS;
-        } else if ($type == TYPE_REVIEWER) {
-            $tableName = TABLE_REVIEWERS;
-        } else {
-            logInfo('unknown type');
-            $tableName = TABLE_LEARNERS;
-        }
-        return $tableName;
-    }
-
     function checkLogin($mobilePhoneNumber, $password)
     {
         $sql = "SELECT * FROM users WHERE mobilePhoneNumber=? AND password=?";
@@ -73,11 +59,10 @@ class UserDao extends BaseDao
         return $this->db->query($sql, $array)->num_rows() == 1;
     }
 
-    private function findUser($filed, $value, $cleanFields = true)
+    private function findUser($field, $value, $cleanFields = true)
     {
-        $user = $this->findTypeAndActualUser($filed, $value);
+        $user = $this->findActualUser($field, $value);
         if ($user) {
-            $this->mergeTags($user);
             if ($cleanFields) {
                 $this->cleanUserFieldsForAll($user);
             }
@@ -87,13 +72,13 @@ class UserDao extends BaseDao
 
     private function getPublicFields()
     {
-        return $this->mergeFields(array(KEY_ID, KEY_AVATAR_URL, KEY_USERNAME, KEY_TYPE));
+        return $this->mergeFields(array(KEY_USER_ID, KEY_AVATAR_URL, KEY_USERNAME, KEY_TYPE));
     }
 
     private function getSessionUserFields()
     {
         return $this->mergeFields(array(
-            KEY_ID,
+            KEY_USER_ID,
             KEY_AVATAR_URL,
             KEY_USERNAME,
             KEY_TYPE,
@@ -116,32 +101,13 @@ class UserDao extends BaseDao
 
     function findPublicUserById($id)
     {
-        return $this->findPublicUser(KEY_ID, $id);
+        return $this->findPublicUser(KEY_USER_ID, $id);
     }
 
-    private function findActualUser($type, $field, $value)
+    private function findActualUser($field, $value)
     {
-        $tableName = $this->tableNameByType($type);
-        $user = $this->getOneFromTable($tableName, $field, $value);
+        $user = $this->getOneFromTable(TABLE_USERS, $field, $value);
         return $user;
-    }
-
-    private function findTypeAndActualUser($field, $value)
-    {
-        $fields = $this->mergeFields(array(KEY_TYPE));
-        $user = $this->getOneFromTable(TABLE_USERS, $field, $value, $fields);
-        if ($user) {
-            $type = $user->type;
-            return $this->findActualUser($type, $field, $value);
-        } else {
-            return $user;
-        }
-    }
-
-    // 还用在 ReviewerDao.php
-    function mergeTags($user)
-    {
-        $user->tags = $this->tagDao->getUserTags($user->id);
     }
 
     function findUserBySessionToken($sessionToken)
@@ -149,8 +115,9 @@ class UserDao extends BaseDao
         return $this->findUser(KEY_SESSION_TOKEN, $sessionToken);
     }
 
-    function findUserById($id) {
-        return $this->findUser(KEY_ID, $id);
+    function findUserById($id)
+    {
+        return $this->findUser(KEY_USER_ID, $id);
     }
 
     private function updateSessionToken($user)
@@ -183,11 +150,11 @@ class UserDao extends BaseDao
 
     function updateUser($user, $data)
     {
-        $tableName = $this->tableNameByType($user->type);
-        $this->db->where(KEY_ID, $user->id);
+        $tableName = TABLE_USERS;
+        $this->db->where(KEY_USER_ID, $user->userId);
         $result = $this->db->update($tableName, $data);
         if ($result) {
-            return $this->findUser(KEY_ID, $user->id);
+            return $this->findUser(KEY_USER_ID, $user->userId);
         }
     }
 

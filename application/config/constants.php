@@ -117,7 +117,6 @@ define('KEY_SESSION_HEADER', 'X-CR-Session');
 
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');
-define('KEY_ID', 'id');
 
 // users table
 define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
@@ -139,90 +138,10 @@ define('KEY_GITHUB_USERNAME', 'gitHubUsername');
 define('KEY_MAX_ORDERS', 'maxOrders');
 define('KEY_TAGS', 'tags');
 
-// orders table
-define('KEY_ORDER_ID', 'orderId');
-define('KEY_GITHUB_URL', 'gitHubUrl');
-define('KEY_LEARNER_ID', 'learnerId');
-define('KEY_REVIEWER_ID', 'reviewerId');
-define('KEY_CODE_LINES', 'codeLines');
-define('KEY_REMARK', 'remark');
-define('KEY_STATUS', 'status');
-define('KEY_CREATED', 'created');
-define('KEY_UPDATED', 'updated');
-define('KEY_FIRST_REWARD_ID', 'firstRewardId');
 
-// reviews table
-define('KEY_REVIEW_ID', 'reviewId');
-define('KEY_TITLE', 'title');
-define('KEY_CONTENT', 'content');
-define('KEY_DISPLAYING', 'displaying');
-define('KEY_COVER_URL', 'coverUrl');
-
-// rewards rable
-define('TABLE_REWARDS', 'rewards');
-define('KEY_AMOUNT', 'amount');
-define('KEY_REWARD_ID', 'rewardId');
-define('KEY_ORDER_NO', 'orderNo');
-define('KEY_PAID', 'paid');
-define('KEY_CREATOR', 'creator');
-define('KEY_CREATOR_IP', 'creatorIP');
-
-define('ORDER_STATUS_NOT_PAID', 'unpaid');
-define('ORDER_STATUS_PAID', 'paid');
-define('ORDER_STATUS_FINISHED', 'finished');
-define('ORDER_STATUS_REJECTED', 'rejected');
-define('ORDER_STATUS_CONSENTED', 'consented');
-
-define('TABLE_ORDERS', 'orders');
-define('TABLE_REVIEWS', 'reviews');
-define('TABLE_LEARNERS', 'learners');
-define('TABLE_REVIEWERS', 'reviewers');
-define('TABLE_TAGS', 'tags');
-define('TABLE_USERS_TAGS', 'users_tags');
-define('TABLE_REVIEWS_TAGS', 'reviews_tags');
 define('TABLE_USERS', 'users');
 
-define('CHARGE_UNPAID', 0);
-define('CHARGE_PAID', 1);
-
-// charges table
-define('TABLE_CHARGES', 'charges');
-define('KEY_CHARGE_ID', 'chargeId');
-
-define('LEAST_FIRST_REWARD', 100 * 50);
-define('LEAST_COMMON_REWARD', 100);
-define('MAX_COMMON_REWARD', 100 * 1000);
-
-define('KEY_OP', 'op');
-define('KEY_OP_ADD', 'add');
-define('KEY_OP_REMOVE', 'remove');
-
-// tags table
-define('KEY_TAG_NAME', 'tagName');
-define('KEY_TAG_ID', 'tagId');
-define('KEY_COLOR', 'color');
-
 define('KEY_USER_ID', 'userId');
-
-define('STATUS_OP_CONSENT', 'consent');
-define('STATUS_OP_REJECT', 'reject');
-
-// review_visits table
-define('TABLE_REVIEW_VISITS', 'review_visits');
-define('KEY_VISITOR_ID', 'visitorId');
-define('KEY_REFERRER', 'referrer');
-define('KEY_VISIT_ID', 'visitId');
-
-// video table
-define('TABLE_VIDEOS', 'videos');
-define('KEY_VIDEO_ID', 'videoId');
-define('KEY_SOURCE', 'source');
-define('KEY_SPEAKER', 'speaker');
-
-define('TABLE_VIDEO_VISITS', 'video_visits');
-
-define('TABLE_APPLICATIONS', 'applications');
-define('KEY_APPLICATION_ID', 'applicationId');
 
 // sms
 define('SMS_TEMPLATE', 'template');

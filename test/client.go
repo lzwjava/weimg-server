@@ -2,7 +2,6 @@ package codereview
 
 import (
 	"fmt"
-	"log"
 	"encoding/json"
 	"io"
 	"bytes"
@@ -10,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"reflect"
 	"net/http/cookiejar"
 )
 
@@ -28,12 +26,6 @@ func NewClient() *Client {
 		cookieJar: cookieJar,
 		admin: false,
 	}
-}
-
-func unused() {
-	fmt.Printf("")
-	log.Fatal()
-	reflect.TypeOf("string")
 }
 
 func (c *Client) post(path string, params url.Values) (map[string]interface{}) {
