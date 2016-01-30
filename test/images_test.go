@@ -23,6 +23,14 @@ func addImage(c *Client, imageId string) {
 		"imageId":{imageId}, "description": {"It's my avatar"}});
 }
 
+func TestImages_token(t *testing.T) {
+	c := NewClient()
+	res := c.getData("images/upload", url.Values{})
+	assert.NotNil(t, res["imageId"]);
+	assert.NotNil(t, res["uptoken"]);
+	assert.Equal(t, "http://7xqmlm.com1.z0.glb.clouddn.com", res["bucketUrl"].(string))
+}
+
 func TestImages_get(t *testing.T) {
 
 }
