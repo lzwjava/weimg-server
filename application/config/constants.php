@@ -84,29 +84,25 @@ defined('EXIT_DATABASE') OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN') OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-define('REQ_OK', 0);
+define('REQ_OK', 'success');
 
-define('ERROR_USERNAME_TAKEN', 1);
-define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 2);
-define('ERROR_SMS_WRONG', 3);
-define('ERROR_MISS_PARAMETERS', 4);
-define('ERROR_AT_LEAST_ONE_UPDATE', 5);
-define('ERROR_NOT_IN_SESSION', 6);
-define('ERROR_USER_NOT_EXIST', 7);
-define('ERROR_OBJECT_NOT_EXIST', 8);
-define('ERROR_LOGIN_FAILED', 10);
-define('ERROR_ONLY_LEARNER_CAN_ORDER', 11);
-define('ERROR_UNKNOWN_TYPE', 12);
-define('ERROR_NOT_ALLOW_DO_IT', 13);
-define('ERROR_PINGPP_CHARGE', 14);
-define('ERROR_PARAMETER_ILLEGAL', 15);
-define('ERROR_AMOUNT_UNIT', 16);
-define('ERROR_INVALID_IP', 17);
-define('ERROR_ALREADY_DO_IT', 18);
-define('ERROR_PASSWORD_FORMAT', 19);
-define('ERROR_EXCEED_MAX_ORDERS', 20);
-define('ERROR_CODE_LINES_INVALID', 21);
-define('ERROR_RUN_SQL_FAILED', 22);
+define('ERROR_USERNAME_TAKEN', 'username_token');
+define('ERROR_MOBILE_PHONE_NUMBER_TAKEN', 'phone_number_taken');
+define('ERROR_SMS_WRONG', 'sms_wrong');
+define('ERROR_MISS_PARAMETERS', 'missing_parameters');
+define('ERROR_AT_LEAST_ONE_UPDATE', 'at_least_one_update');
+define('ERROR_NOT_IN_SESSION', 'not_in_session');
+define('ERROR_USER_NOT_EXIST', 'user_not_exists');
+define('ERROR_OBJECT_NOT_EXIST', 'object_not_exists');
+define('ERROR_LOGIN_FAILED', 'login_failed');
+define('ERROR_UNKNOWN_TYPE', 'unknown_type');
+define('ERROR_NOT_ALLOW_DO_IT', 'not_allow_do_it');
+define('ERROR_PARAMETER_ILLEGAL', 'parameter_illegal');
+define('ERROR_INVALID_IP', 'invalid_ip');
+define('ERROR_ALREADY_DO_IT', 'already_do_it');
+define('ERROR_PASSWORD_FORMAT', 'password_format_wrong');
+define('ERROR_RUN_SQL_FAILED', 'run_sql_failed');
+define('ERROR_URL_NOT_WORKING', 'url_not_working');
 
 define('TYPE_REVIEWER', 'reviewer');
 define('TYPE_LEARNER', 'learner');
@@ -130,14 +126,10 @@ define('KEY_VALID', 'valid');
 
 define('KEY_SMS_CODE', 'smsCode');
 
-define('KEY_INTRODUCTION', 'introduction');
-define('KEY_EXPERIENCE', 'experience');
-define('KEY_COMPANY', 'company');
-define('KEY_JOB_TITLE', 'jobTitle');
-define('KEY_GITHUB_USERNAME', 'gitHubUsername');
-define('KEY_MAX_ORDERS', 'maxOrders');
 define('KEY_TAGS', 'tags');
 
+define('KEY_CREATED', 'created');
+define('KEY_UPDATED', 'updated');
 
 define('TABLE_USERS', 'users');
 
@@ -149,3 +141,20 @@ define('SMS_REVIEWER', 'reviewer');
 define('SMS_LEARNER', 'learner');
 define('SMS_CODE_URL', 'codeUrl');
 define('SMS_REVIEW_URL', 'reviewUrl');
+
+// images
+define('TABLE_IMAGES', 'images');
+define('KEY_IMAGE_ID', 'imageId');
+define('KEY_DESCRIPTION', 'description');
+define('KEY_LINK', 'link');
+define('KEY_TOPIC', 'topic');
+define('KEY_AUTHOR', 'author');
+define('KEY_TITLE', 'title');
+
+define('KEY_IMAGE_IDS', 'imageIds');
+
+// posts, post_images
+define('KEY_POST_ID', 'postId');
+define('TABLE_POSTS', 'posts');
+
+define('TABLE_POST_IMAGES', 'post_images');

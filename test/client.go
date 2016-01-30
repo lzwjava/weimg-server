@@ -178,7 +178,7 @@ func (c *Client) postWithStr(path string, body string) map[string]interface{} {
 }
 
 func (c *Client)resultFromRes(res map[string]interface{}) interface{} {
-	if (toInt(res["code"]) != 0) {
+	if (res["status"] != "success") {
 		panic("code is not 0")
 	}
 	var data interface{}

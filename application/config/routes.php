@@ -53,38 +53,12 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['user/tags']['POST'] = 'user/addTag';
-$route['user/tags/(\d+)']['DELETE'] = 'user/removeTag/$1';
 
-$route['orders']['POST'] = 'orders/add';
-$route['orders/(\d+)']['POST'] = 'orders/update/$1';
-$route['orders/(\d+)']['GET'] = 'orders/view/$1';
-$route['orders/(\d+)/reward']['POST'] = 'orders/reward/$1';
-$route['orders/(\d+)/review'] = 'reviews/viewByOrder/$1';
-$route['user/orders']['GET'] = 'orders/myOrders';
+$route['self']['PATCH'] = 'users/update';
+$route['self']['GET'] = 'users/self';
+$route['users']['POST'] = 'users/register';
+$route['login']['POST'] = 'users/login';
+$route['requestSmsCode'] = 'users/requestSmsCode';
 
-$route['reviewers/(\w+)/valid']['GET'] = 'reviewers/valid/$1';
-$route['reviewers/(\w+)']['GET'] = 'reviewers/view/$1';
-
-$route['reviewers/(\w+)/reviews']['GET'] = 'reviews/userReviews/$1';
-$route['reviews']['GET'] = 'reviews/allReviews';
-$route['reviews/(\d+)/tags']['POST'] = 'reviews/addTag/$1';
-$route['reviews/(\d+)/tags/(\d+)']['DELETE'] = 'reviews/removeTag/$1/$2';
-$route['reviews/(\d+)']['PATCH'] = 'reviews/update/$1';
-$route['reviews']['POST'] = 'reviews/add';
-$route['reviews/(\d+)']['GET'] = 'reviews/view/$1';
-$route['reviews/(\d+)/visits']['POST'] = 'visits/visitReview/$1';
-
-$route['user']['PATCH'] = 'user/update';
-
-$route['api/example/users/(:num)'] = 'api/example/users/id/$1'; // Example 4
-$route['api/example/users/(:num)(\.)([a-zA-Z0-9_-]+)(.*)'] = 'api/example/users/id/$1/format/$3$4'; // Example 8
-
-
-$route['videos']['POST'] = 'videos/createVideo';
-$route['videos']['GET'] = 'videos/getVideoList';
-$route['videos/(\d+)']['GET'] = 'videos/one/$1';
-$route['videos/(\d+)/visits']['POST'] = 'visits/visitVideo/$1';
-
-$route['applications']['POST'] = 'applications/create';
-$route['applications/(\d+)/agree']['GET'] = 'applications/agree/$1';
+$route['images']['POST'] = 'images/create';
+$route['images/'][]

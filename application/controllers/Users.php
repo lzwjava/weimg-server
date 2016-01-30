@@ -10,14 +10,13 @@
 if (!defined('BASEPATH'))
     exit ('No direct script access allowed');
 
-class User extends BaseController
+class Users extends BaseController
 {
     public $leancloud;
 
     function __construct()
     {
         parent::__construct();
-        $this->load->model('userDao');
         $this->load->library('LeanCloud');
     }
 

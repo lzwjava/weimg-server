@@ -29,7 +29,6 @@ class UserDao extends BaseDao
     {
 
         $data = array(
-            KEY_USER_ID => $this->genId(),
             KEY_USERNAME => $username,
             KEY_PASSWORD => sha1($password),
             KEY_MOBILE_PHONE_NUMBER => $mobilePhoneNumber,
@@ -81,15 +80,11 @@ class UserDao extends BaseDao
             KEY_USER_ID,
             KEY_AVATAR_URL,
             KEY_USERNAME,
-            KEY_TYPE,
             KEY_MOBILE_PHONE_NUMBER,
+            KEY_SESSION_TOKEN_CREATED,
             KEY_SESSION_TOKEN,
             KEY_CREATED,
             KEY_UPDATED,
-            KEY_INTRODUCTION,
-            KEY_COMPANY,
-            KEY_JOB_TITLE,
-            KEY_GITHUB_USERNAME
         ));
     }
 
@@ -106,7 +101,8 @@ class UserDao extends BaseDao
 
     private function findActualUser($field, $value)
     {
-        $user = $this->getOneFromTable(TABLE_USERS, $field, $value);
+        $fields = $this->getSessionUserFields();
+        $user = $this->getOneFromTable(TABLE_USERS, $field, $value, $fields);
         return $user;
     }
 

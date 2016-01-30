@@ -36,14 +36,22 @@ if (!function_exists('setCookieForever')) {
     }
 }
 
+if (!function_exists('tokenChars')) {
+    function tokenChars()
+    {
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet .= "0123456789";
+        return $codeAlphabet;
+    }
+}
+
 if (!function_exists('getToken')) {
 
     function getToken($length = 16)
     {
         $token = "";
-        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
-        $codeAlphabet .= "0123456789";
+        $codeAlphabet = tokenChars();
         $max = strlen($codeAlphabet) - 1;
         for ($i = 0; $i < $length; $i++) {
             $token .= $codeAlphabet[rand(0, $max)];
@@ -78,7 +86,8 @@ if (!function_exists('logInfo')) {
 }
 
 if (!function_exists('amountToYuan')) {
-    function amountToYuan($amount) {
+    function amountToYuan($amount)
+    {
         return $amount / 100;
     }
 }

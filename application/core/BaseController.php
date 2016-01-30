@@ -8,13 +8,17 @@ require_once APPPATH . '/libraries/REST_Controller.php';
 class BaseController extends REST_Controller
 {
 
+    public $userDao;
+
     function __construct()
     {
         parent::__construct();
         \Pingpp\Pingpp::setApiKey('sk_test_9Giz1SPG8mD4OW94OSTmPGyL');
+        $this->load->model('userDao');
+        $userDao = new UserDao();
     }
 
-    protected function responseResult($code, $result = null, $error = null, $total = null)
+    protected function responseResult($status, $result = null, $error = null, $total = null)
     {
         if ($result === null) {
             $result = new stdClass;
@@ -23,7 +27,7 @@ class BaseController extends REST_Controller
             $error = "";
         }
         $arr = array(
-            'code' => $code,
+            'status' => $status,
             'result' => $result
         );
         if ($total !== null) {
@@ -46,9 +50,9 @@ class BaseController extends REST_Controller
         $this->responseResult(REQ_OK, $resultData, null, $total);
     }
 
-    protected function failure($resultCode, $resultInfo)
+    protected function failure($status, $error = null)
     {
-        $this->responseResult($resultCode, null, $resultInfo);
+        $this->responseResult($status, null, $error);
     }
 
     protected function checkIfParamsNotExist($request, $params, $checkEmpty = true)
@@ -164,17 +168,6 @@ class BaseController extends REST_Controller
         $json = json_encode($array);
         $this->failure(ERROR_PARAMETER_ILLEGAL, "$value 不在 $json 之中");
         return true;
-    }
-
-    protected function allOrderStatus()
-    {
-        return array(
-            ORDER_STATUS_NOT_PAID,
-            ORDER_STATUS_PAID,
-            ORDER_STATUS_CONSENTED,
-            ORDER_STATUS_REJECTED,
-            ORDER_STATUS_FINISHED
-        );
     }
 
     protected function getSessionUser()

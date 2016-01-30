@@ -17,7 +17,7 @@ func TestMain(m *testing.M) {
 }
 
 func cleanTables() {
-	tables := []string{"users"}
+	tables := []string{"images", "users"}
 	for _, table := range tables {
 		deleteTable(table)
 	}
@@ -31,9 +31,9 @@ func checkErr(err error) {
 }
 
 func registerUser(c *Client) map[string]interface{} {
-	res := c.post("user/register", url.Values{"mobilePhoneNumber": {"13261630925"},
+	res := c.post("users", url.Values{"mobilePhoneNumber": {"13261630925"},
 		"username": {"lzwjavaTest"}, "smsCode": {"5555"}, "password":{md5password("123456")}})
-	if (toInt(res["code"]) == 0) {
+	if (res["status"] == "success") {
 		registerRes := res["result"].(map[string]interface{})
 		c.sessionToken = registerRes["sessionToken"].(string)
 		return registerRes
@@ -44,7 +44,7 @@ func registerUser(c *Client) map[string]interface{} {
 }
 
 func login(c *Client, mobilePhoneNumber string, password string) map[string]interface{} {
-	return c.postData("user/login", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
+	return c.postData("login", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
 		"password":{md5password(password)}});
 }
 
