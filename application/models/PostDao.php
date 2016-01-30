@@ -26,6 +26,11 @@ class PostDao extends BaseDao
             $this->db->insert(TABLE_POST_IMAGES, $postImage);
         }
         $this->db->trans_complete();
-        return $this->db->trans_status();
+        return $insertId;
+    }
+
+    function getPost($postId)
+    {
+        return $this->getOneFromTable(TABLE_POSTS, KEY_POST_ID, $postId);
     }
 }

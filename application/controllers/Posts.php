@@ -26,14 +26,20 @@ class Posts extends BaseController
         if (!$user) {
             return;
         }
-        $imageIds = $this->post(KEY_IMAGE_IDS);
+        $imageIdsStr = $this->post(KEY_IMAGE_IDS);
+        $imageIds = json_decode($imageIdsStr);
         $title = $this->post(KEY_TITLE);
         $topic = $this->post(KEY_TOPIC);
-        $ok = $this->postDao->addPost($imageIds, $title, $user->userId, $topic);
-        if ($ok) {
-            $this->succeed();
+        $postId = $this->postDao->addPost($imageIds, $title, $user->userId, $topic);
+        if ($postId !== false) {
+            $this->succeed(array(KEY_POST_ID => $postId));
         } else {
             $this->failure(ERROR_RUN_SQL_FAILED);
         }
+    }
+
+    function fetch_get($postId)
+    {
+        $this->succeed($this->postDao->getPost($postId));
     }
 }
