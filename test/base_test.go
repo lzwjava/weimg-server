@@ -17,7 +17,7 @@ func TestMain(m *testing.M) {
 }
 
 func cleanTables() {
-	tables := []string{"post_images","posts", "images", "users"}
+	tables := []string{"post_votes", "post_images", "posts", "images", "users"}
 	for _, table := range tables {
 		deleteTable(table)
 	}

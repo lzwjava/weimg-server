@@ -46,8 +46,13 @@ func TestPost_list(t *testing.T) {
 	fmt.Println(posts)
 }
 
-func TestPost_test(t *testing.T) {
+func TestPost_vote(t *testing.T) {
 	c := NewClient()
-	res := c.get("posts/test", url.Values{})
-	fmt.Println(res)
+	registerUser(c)
+	imageId := "abcdef"
+	addImage(c, imageId);
+	post := addPost(c, imageId);
+	postId := floatToStr(post["postId"]);
+	res := c.getData("posts/" + postId + "/vote/up", url.Values{})
+	assert.NotNil(t, res)
 }

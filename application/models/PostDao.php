@@ -43,9 +43,23 @@ class PostDao extends BaseDao
         return $insertId;
     }
 
+    private function publicFields()
+    {
+        return $this->mergeFields(array(
+            KEY_POST_ID,
+            KEY_TITLE,
+            KEY_TOPIC,
+            KEY_SCORE,
+            KEY_CREATED
+        ), TABLE_POSTS);
+    }
+
     function getPost($postId)
     {
-        return $this->getOneFromTable(TABLE_POSTS, KEY_POST_ID, $postId);
+        $fields = $this->publicFields();
+        $sql = "SELECT $fields FROM posts LEFT JOIN post_images USING(postId)
+                LEFT JOIN images USING(imageId) WHERE postId=? GROUP BY postId";
+        return $this->db->query($sql, array($postId))->row();
     }
 
     function getPostList($skip, $limit)
@@ -56,30 +70,12 @@ class PostDao extends BaseDao
         return $this->db->query($sql)->result();
     }
 
-    private function updateUpsAndDowns($postId, $vote, $delta)
-    {
-        $sql = "SELECT created FROM posts WHERE postId = ?";
-        $value = array($postId);
-        $post = $this->db->query($sql, $value)->row();
-        if ($vote == 'up') {
-            $field = 'ups';
-            $value = $post->ups;
-        } else {
-            $field = 'downs';
-            $value = $post->downs + 1;
-        }
-        $hot = $this->scoreHelper->hot($post->ups, $post->downs, $post->created);
-        $update = "UPDATE posts SET $field=$value,score=? WHERE postId=?";
-        $updateValues = array($hot, $postId);
-        $this->db->query($update, $updateValues);
-    }
-
     private function getVote($userId, $postId)
     {
         $sql = "SELECT vote FROM post_votes WHERE userId=? AND postId=?";
         $value = array($userId, $postId);
         $row = $this->db->query($sql, $value)->row();
-        return $row ? $row->value : null;
+        return $row ? $row->vote : null;
     }
 
     private function addVote($userId, $postId, $vote)
@@ -97,7 +93,8 @@ class PostDao extends BaseDao
     {
         $this->db->delete(TABLE_POST_VOTES, array(
             KEY_USER_ID => $userId,
-            KEY_POST_ID => $postId));
+            KEY_POST_ID => $postId
+        ));
     }
 
     private function updateVote($userId, $postId, $vote)
@@ -112,12 +109,14 @@ class PostDao extends BaseDao
 
     private function updateScore($postId)
     {
-        $sql = "SELECT created, count(vote='up') AS ups, count(vote='down') AS downs
+        $sql = "SELECT created, count(post_votes.vote = 'up') AS ups, count(post_votes.vote ='down') AS downs
                 FROM posts LEFT JOIN post_votes USING(postId)
                 WHERE postId=? GROUP BY postId";
         $values = array($postId);
         $post = $this->db->query($sql, $values)->row();
-        $hot = $this->scoreHelper->hot($post->ups, $post->downs, $post->created);
+        $date = new DateTime($post->created);
+        logInfo("post " . json_encode($post));
+        $hot = $this->scoreHelper->hot($post->ups, $post->downs, $date);
         $this->db->update(TABLE_POSTS, array(KEY_SCORE => $hot));
     }
 
@@ -133,6 +132,6 @@ class PostDao extends BaseDao
             $this->updateVote($userId, $postId, $newVote);
         }
         $this->updateScore($postId);
-        $this->db->trans_compete();
+        $this->db->trans_complete();
     }
 }
