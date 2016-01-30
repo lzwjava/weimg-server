@@ -26,8 +26,7 @@ class Images extends BaseController
         $url = prep_url($url);
         $header_arr = @get_headers($url);
         if (!$header_arr) {
-            return true;
-            //return false;
+            return false;
         } else {
             return in_array('HTTP/1.0 200 OK', $header_arr) ||
             in_array('HTTP/1.1 200 OK', $header_arr);
@@ -62,10 +61,6 @@ class Images extends BaseController
         $desc = $this->post(KEY_DESCRIPTION);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
-            return;
-        }
-        if (!$this->urlIsWorking($link)) {
-            $this->failure(ERROR_URL_NOT_WORKING);
             return;
         }
         if ($this->checkIfTokenInvalid($imageId)) {

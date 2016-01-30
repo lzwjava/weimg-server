@@ -19,7 +19,7 @@ class BaseDao extends CI_Model
     {
         if ($prefixTableName) {
             foreach ($fields as $index => $field) {
-                $fields[$index] .= $prefixTableName . '.' . $field;
+                $fields[$index] = $prefixTableName . '.' . $field;
             }
         }
         return implode($fields, ',');

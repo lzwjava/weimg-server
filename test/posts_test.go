@@ -55,4 +55,24 @@ func TestPost_vote(t *testing.T) {
 	postId := floatToStr(post["postId"]);
 	res := c.getData("posts/" + postId + "/vote/up", url.Values{})
 	assert.NotNil(t, res)
+
+	post = c.getData("posts/" + postId, url.Values{})
+	assert.Equal(t, toInt(post["ups"]), 1)
+	assert.Equal(t, toInt(post["downs"]), 0)
+
+	c.getData("posts/" + postId + "/vote/up", url.Values{})
+	post = c.getData("posts/" + postId, url.Values{})
+	assert.Equal(t, toInt(post["ups"]), 0)
+	assert.Equal(t, toInt(post["downs"]), 0)
+
+	c.getData("posts/" + postId + "/vote/down", url.Values{})
+	post = c.getData("posts/" + postId, url.Values{})
+	assert.Equal(t, toInt(post["ups"]), 0)
+	assert.Equal(t, toInt(post["downs"]), 1)
+
+	c.getData("posts/" + postId + "/vote/up", url.Values{})
+	post = c.getData("posts/" + postId, url.Values{})
+	assert.Equal(t, toInt(post["ups"]), 1)
+	assert.Equal(t, toInt(post["downs"]), 0)
+
 }

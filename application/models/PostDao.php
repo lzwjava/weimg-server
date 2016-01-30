@@ -57,8 +57,11 @@ class PostDao extends BaseDao
     function getPost($postId)
     {
         $fields = $this->publicFields();
-        $sql = "SELECT $fields FROM posts LEFT JOIN post_images USING(postId)
-                LEFT JOIN images USING(imageId) WHERE postId=? GROUP BY postId";
+        $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
+                count(CASE WHEN vote='down' THEN 1 END) AS downs
+                FROM posts LEFT JOIN post_images USING(postId)
+                LEFT JOIN images USING(imageId) LEFT JOIN post_votes USING(postId)
+                WHERE postId=? GROUP BY postId";
         return $this->db->query($sql, array($postId))->row();
     }
 
@@ -109,7 +112,8 @@ class PostDao extends BaseDao
 
     private function updateScore($postId)
     {
-        $sql = "SELECT created, count(post_votes.vote = 'up') AS ups, count(post_votes.vote ='down') AS downs
+        $sql = "SELECT created,score, count(CASE WHEN vote='up' THEN 1 END) AS ups,
+                count(CASE WHEN vote='down' THEN 1 END) AS downs
                 FROM posts LEFT JOIN post_votes USING(postId)
                 WHERE postId=? GROUP BY postId";
         $values = array($postId);
@@ -117,6 +121,7 @@ class PostDao extends BaseDao
         $date = new DateTime($post->created);
         logInfo("post " . json_encode($post));
         $hot = $this->scoreHelper->hot($post->ups, $post->downs, $date);
+        logInfo("after $hot");
         $this->db->update(TABLE_POSTS, array(KEY_SCORE => $hot));
     }
 
