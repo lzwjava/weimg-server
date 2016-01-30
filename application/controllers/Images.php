@@ -99,5 +99,4 @@ class Images extends BaseController
         );
         $this->succeed($result);
     }
-
 }

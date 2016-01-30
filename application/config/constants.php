@@ -157,6 +157,7 @@ define('KEY_IMAGE_IDS', 'imageIds');
 define('KEY_POST_ID', 'postId');
 define('TABLE_POSTS', 'posts');
 define('KEY_SCORE', 'score');
+define('KEY_COVER', 'cover');
 
 define('KEY_UP', 'up');
 define('KEY_DOWN', 'down');

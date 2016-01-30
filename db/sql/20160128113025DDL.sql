@@ -40,11 +40,13 @@ CREATE TABLE `posts` (
   `postId`  INT(11)      NOT NULL  AUTO_INCREMENT,
   `title`   VARCHAR(255) NOT NULL,
   `topic`   VARCHAR(31),
+  `cover`   VARCHAR(16)  NOT NULL,
   `author`  INT(11)      NOT NULL,
   `score`   FLOAT(11, 7) NOT NULL,
   `created` TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`postId`),
-  FOREIGN KEY (`author`) REFERENCES `users` (`userId`)
+  FOREIGN KEY (`author`) REFERENCES `users` (`userId`),
+  FOREIGN KEY (`cover`) REFERENCES `images` (`imageId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 /

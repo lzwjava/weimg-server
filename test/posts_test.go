@@ -74,5 +74,4 @@ func TestPost_vote(t *testing.T) {
 	post = c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 1)
 	assert.Equal(t, toInt(post["downs"]), 0)
-
 }
