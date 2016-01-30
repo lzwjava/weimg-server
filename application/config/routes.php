@@ -65,3 +65,4 @@ $route['images/(\w+)']['GET'] = 'images/fetch/$1';
 
 $route['posts']['POST'] = 'posts/create';
 $route['posts/(\d+)']['GET'] = 'posts/fetch/$1';
+$route['posts']['GET'] = 'posts/list';

@@ -41,6 +41,9 @@ CREATE TABLE `posts` (
   `title`   VARCHAR(255) NOT NULL,
   `topic`   VARCHAR(31),
   `author`  INT(11)      NOT NULL,
+  `ups`     INT(11)      NOT NULL  DEFAULT 0,
+  `downs`   INT(11)      NOT NULL  DEFAULT 0,
+  `score`   FLOAT(11, 7) NOT NULL,
   `created` TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`postId`),
   FOREIGN KEY (`author`) REFERENCES `users` (`userId`)

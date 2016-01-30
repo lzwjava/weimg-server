@@ -15,6 +15,7 @@ class Posts extends BaseController
         parent::__construct();
         $this->load->model('PostDao');
         $this->postDao = new PostDao();
+        $this->load->helper('score');
     }
 
     function create_post()
@@ -41,5 +42,21 @@ class Posts extends BaseController
     function fetch_get($postId)
     {
         $this->succeed($this->postDao->getPost($postId));
+    }
+
+    function list_get()
+    {
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $posts = $this->postDao->getPostList($skip, $limit);
+        $this->succeed($posts);
+    }
+
+    function test_get()
+    {
+        $scoreHelper = new ScoreHelper();
+        $scoreHelper->test();
+
+        $this->succeed();
     }
 }

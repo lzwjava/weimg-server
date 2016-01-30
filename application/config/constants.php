@@ -156,5 +156,6 @@ define('KEY_IMAGE_IDS', 'imageIds');
 // posts, post_images
 define('KEY_POST_ID', 'postId');
 define('TABLE_POSTS', 'posts');
+define('KEY_SCORE', 'score');
 
 define('TABLE_POST_IMAGES', 'post_images');
