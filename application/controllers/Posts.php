@@ -52,11 +52,21 @@ class Posts extends BaseController
         $this->succeed($posts);
     }
 
-    function test_get()
+    private function voteArray()
     {
-        $scoreHelper = new ScoreHelper();
-        $scoreHelper->test();
+        return array(KEY_UP, KEY_DOWN);
+    }
 
+    function vote_get($postId, $vote)
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($this->checkIfNotInArray($vote, $this->voteArray())) {
+            return;
+        }
+        $this->postDao->votePost($user->userId, $postId, $vote);
         $this->succeed();
     }
 }

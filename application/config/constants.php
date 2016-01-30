@@ -158,4 +158,11 @@ define('KEY_POST_ID', 'postId');
 define('TABLE_POSTS', 'posts');
 define('KEY_SCORE', 'score');
 
+define('KEY_UP', 'up');
+define('KEY_DOWN', 'down');
+
 define('TABLE_POST_IMAGES', 'post_images');
+
+// post_votes
+define('TABLE_POST_VOTES', 'post_votes');
+define('KEY_VOTE', 'vote');
