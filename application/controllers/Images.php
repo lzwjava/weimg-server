@@ -88,7 +88,7 @@ class Images extends BaseController
         return $upToken;
     }
 
-    public function token_get()
+    public function upload_get()
     {
         $upToken = $this->getUpToken();
         $bucketUrl = "http://7xqmlm.com1.z0.glb.clouddn.com";

@@ -61,7 +61,7 @@ $route['login']['POST'] = 'users/login';
 $route['requestSmsCode'] = 'users/requestSmsCode';
 
 $route['images']['POST'] = 'images/create';
-$route['images/upload']['GET'] = 'images/token';
+$route['images/upload']['GET'] = 'images/upload';
 $route['images/(\w+)']['GET'] = 'images/fetch/$1';
 
 $route['posts']['POST'] = 'posts/create';
