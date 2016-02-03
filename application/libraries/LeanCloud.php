@@ -14,8 +14,8 @@ class LeanCloud
         curl_setopt($ch, CURLOPT_URL, "https://api.leancloud.cn/1.1/" . $path);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "X-LC-Id: gkXnvKfCSt79neUM2mERmEq8",
-            "X-LC-Key: hVj4ar7LOc6iauH0bNAJJQKN",
+            "X-LC-Id: SLC5re13KRwB0sQA3lJnaoFD-gzGzoHsz",
+            "X-LC-Key: yDyoebpPe8dHjbc9txPVLKAD",
             "Content-Type: application/json"
         ));
         if ($data == null) {

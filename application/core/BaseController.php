@@ -15,7 +15,7 @@ class BaseController extends REST_Controller
         parent::__construct();
         \Pingpp\Pingpp::setApiKey('sk_test_9Giz1SPG8mD4OW94OSTmPGyL');
         $this->load->model('userDao');
-        $userDao = new UserDao();
+        $this->userDao = new UserDao();
     }
 
     protected function responseResult($status, $result = null, $error = null, $total = null)
