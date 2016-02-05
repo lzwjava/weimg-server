@@ -33,6 +33,9 @@ class LeanCloud
                 $result = $resultJson->error;
             }
         }
+        if ($result === false) {
+            $result = 'Network error when send smsCode';
+        }
         return array(
             "status" => $status,
             "result" => $result

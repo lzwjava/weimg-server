@@ -60,8 +60,9 @@ $route['users']['POST'] = 'users/register';
 $route['login']['POST'] = 'users/login';
 $route['requestSmsCode'] = 'users/requestSmsCode';
 
+$route['files/uptoken']['GET'] = 'files/uptoken';
+
 $route['images']['POST'] = 'images/create';
-$route['images/upload']['GET'] = 'images/upload';
 $route['images/(\w+)']['GET'] = 'images/fetch/$1';
 
 $route['posts']['POST'] = 'posts/create';

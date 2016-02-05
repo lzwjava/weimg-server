@@ -26,6 +26,10 @@ class BaseController extends REST_Controller
         if ($error === null) {
             $error = "";
         }
+        if (!is_string($error)) {
+            // 确保一定是字符串,避免客户端解析崩溃
+            $error = json_encode($error);
+        }
         $arr = array(
             'status' => $status,
             'result' => $result

@@ -10,6 +10,7 @@ import (
 )
 
 func TestPosts_create(t *testing.T) {
+	setUp()
 	c := NewClient()
 	user := registerUser(c)
 	imageId := "abcdef";
@@ -35,6 +36,7 @@ func addPost(c *Client, imageId string) map[string]interface{} {
 }
 
 func TestPost_list(t *testing.T) {
+	setUp()
 	c := NewClient()
 	registerUser(c)
 	imageId := "abcdef"
@@ -47,6 +49,7 @@ func TestPost_list(t *testing.T) {
 }
 
 func TestPost_vote(t *testing.T) {
+	setUp()
 	c := NewClient()
 	registerUser(c)
 	imageId := "abcdef"

@@ -7,7 +7,6 @@
  * Time: 下午5:06
  */
 
-use Qiniu\Auth;
 
 class Images extends BaseController
 {
@@ -78,25 +77,5 @@ class Images extends BaseController
         $this->succeed($this->imageDao->getImage($imageId));
     }
 
-    private function getUpToken()
-    {
-        $bucket = 'weimg';
-        $accessKey = '-ON85H3cEMUaCuj8UFpLELeEunEAqslrqYqLbn9g';
-        $secretKey = 'X-oHOYDinDEhNk5nr74O1rKDvkmPq0ZQwEZfFt6x';
-        $auth = new Auth($accessKey, $secretKey);
-        $upToken = $auth->uploadToken($bucket);
-        return $upToken;
-    }
 
-    public function upload_get()
-    {
-        $upToken = $this->getUpToken();
-        $bucketUrl = "http://7xqmlm.com1.z0.glb.clouddn.com";
-        $result = array(
-            "imageId" => getToken(7),
-            "uptoken" => $upToken,
-            "bucketUrl" => $bucketUrl
-        );
-        $this->succeed($result);
-    }
 }

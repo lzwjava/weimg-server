@@ -18,6 +18,7 @@ class Users extends BaseController
     {
         parent::__construct();
         $this->load->library('LeanCloud');
+        $this->leancloud = new LeanCloud();
     }
 
     private function checkSmsCodeWrong($mobilePhoneNumber, $smsCode)

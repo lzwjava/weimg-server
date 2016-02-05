@@ -12,8 +12,11 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	cleanTables()
 	os.Exit(m.Run())
+}
+
+func setUp() {
+	cleanTables()
 }
 
 func cleanTables() {

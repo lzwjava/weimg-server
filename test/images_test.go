@@ -7,6 +7,7 @@ import (
 )
 
 func TestImages_post(t *testing.T) {
+	setUp()
 	c := NewClient()
 	registerUser(c)
 	imageId := "abcdef";
@@ -24,9 +25,10 @@ func addImage(c *Client, imageId string) {
 }
 
 func TestImages_token(t *testing.T) {
+	setUp()
 	c := NewClient()
-	res := c.getData("images/upload", url.Values{})
-	assert.NotNil(t, res["imageId"]);
+	res := c.getData("files/uptoken", url.Values{})
+	assert.NotNil(t, res["key"]);
 	assert.NotNil(t, res["uptoken"]);
 	assert.Equal(t, "http://7xqmlm.com1.z0.glb.clouddn.com", res["bucketUrl"].(string))
 }

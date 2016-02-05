@@ -61,3 +61,4 @@ func TestUser_requestSmsCode(t *testing.T) {
 	res := c.post("requestSmsCode", url.Values{"mobilePhoneNumber": {"xx"}})
 	fmt.Println(res)
 }
+
