@@ -10,7 +10,7 @@ func TestImages_post(t *testing.T) {
 	setUp()
 	c := NewClient()
 	registerUser(c)
-	imageId := "abcdef";
+	imageId := imageId()
 	res := c.post("images", url.Values{"link": {"https://avatars1.githubusercontent.com/u/15997353?v=3&s=200"},
 		"imageId":{imageId}, "description": {"It's my avatar"}});
 	assert.NotNil(t, res)
@@ -20,7 +20,7 @@ func TestImages_post(t *testing.T) {
 }
 
 func addImage(c *Client, imageId string) {
-	c.post("images", url.Values{"link": {"https://avatars1.githubusercontent.com/u/15997353?v=3&s=200"},
+	c.post("images", url.Values{"link": {"http://7xqmlm.com1.z0.glb.clouddn.com/" + imageId + ".jpg"},
 		"imageId":{imageId}, "description": {"It's my avatar"}});
 }
 

@@ -73,9 +73,10 @@ class PostDao extends BaseDao
     {
         $fields = $this->publicFields();
         $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
-                count(CASE WHEN vote='down' THEN 1 END) AS downs
+                count(CASE WHEN vote='down' THEN 1 END) AS downs,
+                images.link as coverUrl
                 FROM posts LEFT JOIN post_images USING(postId)
-                LEFT JOIN images USING(imageId)
+                LEFT JOIN images ON images.imageId = posts.cover
                 LEFT JOIN post_votes USING(postId) GROUP BY postId
                 order by score DESC limit $limit offset $skip";
         return $this->db->query($sql)->result();

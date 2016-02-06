@@ -107,9 +107,9 @@ define('ERROR_URL_NOT_WORKING', 'url_not_working');
 define('TYPE_REVIEWER', 'reviewer');
 define('TYPE_LEARNER', 'learner');
 
-define('KEY_COOKIE_TOKEN', 'crtoken');
+define('KEY_COOKIE_TOKEN', 'SessionToken');
 define('COOKIE_VID', 'vid');
-define('KEY_SESSION_HEADER', 'X-CR-Session');
+define('KEY_SESSION_HEADER', 'X-Session');
 
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');

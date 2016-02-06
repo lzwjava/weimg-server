@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
-	"fmt"
 	"time"
 )
 
@@ -35,24 +34,31 @@ func addPost(c *Client, imageId string) map[string]interface{} {
 	return c.postData("posts", url.Values{"imageIds":{imageIds}, "title":{"Weird Person"}, "topic":{"搞笑"}});
 }
 
+func imageId() string {
+	return "2ypzvXw"
+}
+
 func TestPost_list(t *testing.T) {
 	setUp()
 	c := NewClient()
 	registerUser(c)
-	imageId := "abcdef"
+	imageId := imageId()
 	addImage(c, imageId);
 	addPost(c, imageId);
 	time.Sleep(time.Second)
 	addPost(c, imageId)
 	posts := c.getArrayData("posts", url.Values{"limit":{"2"}})
-	fmt.Println(posts)
+	if len(posts) > 0 {
+		post := posts[0].(map[string]interface{})
+		assert.NotNil(t, post["coverUrl"])
+	}
 }
 
 func TestPost_vote(t *testing.T) {
 	setUp()
 	c := NewClient()
 	registerUser(c)
-	imageId := "abcdef"
+	imageId := imageId()
 	addImage(c, imageId);
 	post := addPost(c, imageId);
 	postId := floatToStr(post["postId"]);
