@@ -14,11 +14,13 @@ class ImageDao extends BaseDao
         return getToken(6);
     }
 
-    function addImage($imageId, $link, $author, $description)
+    function addImage($imageId, $link, $author, $description, $width, $height)
     {
         $data = array(
             KEY_IMAGE_ID => $imageId,
             KEY_LINK => $link,
+            KEY_WIDTH => $width,
+            KEY_HEIGHT => $height,
             KEY_AUTHOR => $author,
             KEY_DESCRIPTION => $description,
         );

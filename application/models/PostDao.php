@@ -74,12 +74,32 @@ class PostDao extends BaseDao
         $fields = $this->publicFields();
         $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN vote='down' THEN 1 END) AS downs,
-                images.link as coverUrl
+                i.imageId,i.link,i.width,i.height
                 FROM posts LEFT JOIN post_images USING(postId)
-                LEFT JOIN images ON images.imageId = posts.cover
+                LEFT JOIN images as i ON i.imageId = posts.cover
                 LEFT JOIN post_votes USING(postId) GROUP BY postId
                 order by score DESC limit $limit offset $skip";
-        return $this->db->query($sql)->result();
+        $posts = $this->db->query($sql)->result();
+        $this->handlePosts($posts);
+        return $posts;
+    }
+
+    private function handlePosts($posts)
+    {
+        foreach ($posts as $post) {
+            $cover = $this->extractFields($post, array(KEY_IMAGE_ID, KEY_LINK, KEY_WIDTH, KEY_HEIGHT));
+            $post->cover = $cover;
+        }
+    }
+
+    private function extractFields($object, $fields)
+    {
+        $newObj = new StdClass();
+        foreach ($fields as $field) {
+            $newObj->$field = $object->$field;
+            unset($object->$field);
+        }
+        return $newObj;
     }
 
     private function getVote($userId, $postId)

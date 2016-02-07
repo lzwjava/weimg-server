@@ -150,6 +150,8 @@ define('KEY_LINK', 'link');
 define('KEY_TOPIC', 'topic');
 define('KEY_AUTHOR', 'author');
 define('KEY_TITLE', 'title');
+define('KEY_WIDTH', 'width');
+define('KEY_HEIGHT', 'height');
 
 define('KEY_IMAGE_IDS', 'imageIds');
 

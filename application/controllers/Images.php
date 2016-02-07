@@ -6,8 +6,6 @@
  * Date: 16/1/29
  * Time: 下午5:06
  */
-
-
 class Images extends BaseController
 {
     public $imageDao;
@@ -55,12 +53,16 @@ class Images extends BaseController
 
     function create_post()
     {
-        if ($this->checkIfParamsNotExist($this->post(), array(KEY_LINK, KEY_IMAGE_ID))) {
+        if ($this->checkIfParamsNotExist($this->post(),
+            array(KEY_LINK, KEY_IMAGE_ID, KEY_WIDTH, KEY_HEIGHT))
+        ) {
             return;
         }
         $imageId = $this->post(KEY_IMAGE_ID);
         $link = $this->post(KEY_LINK);
         $desc = $this->post(KEY_DESCRIPTION);
+        $width = $this->post(KEY_WIDTH);
+        $height = $this->post(KEY_HEIGHT);
         $user = $this->checkAndGetSessionUser();
         if (!$user) {
             return;
@@ -68,7 +70,7 @@ class Images extends BaseController
         if ($this->checkIfTokenInvalid($imageId)) {
             return;
         }
-        $this->imageDao->addImage($imageId, $link, $user->userId, $desc);
+        $this->imageDao->addImage($imageId, $link, $user->userId, $desc, $width, $height);
         $this->succeed();
     }
 

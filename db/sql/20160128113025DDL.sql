@@ -24,11 +24,13 @@ CREATE TABLE `users` (
 
 DROP TABLE IF EXISTS `images` /
 CREATE TABLE `images` (
-  `imageId`     VARCHAR(31)  NOT NULL,
-  `link`        VARCHAR(255) NOT NULL,
-  `author`      INT(31)      NOT NULL,
+  `imageId`     VARCHAR(31)       NOT NULL,
+  `link`        VARCHAR(255)      NOT NULL,
+  `width`       SMALLINT UNSIGNED NOT NULL,
+  `height`      SMALLINT UNSIGNED NOT NULL,
+  `author`      INT(31)           NOT NULL,
   `description` VARCHAR(511),
-  `created`     TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  `created`     TIMESTAMP         NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`imageId`),
   FOREIGN KEY (`author`) REFERENCES `users` (`userId`)
 )
