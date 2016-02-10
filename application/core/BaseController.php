@@ -222,5 +222,9 @@ class BaseController extends REST_Controller
         }
     }
 
+    protected function voteArray()
+    {
+        return array(KEY_UP, KEY_DOWN);
+    }
 }
 

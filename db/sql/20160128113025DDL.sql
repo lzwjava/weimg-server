@@ -93,3 +93,17 @@ CREATE TABLE `comments` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 /
+
+DROP TABLE `comment_votes` /
+CREATE TABLE `comment_votes` (
+  `voteId`    INT(11)     NOT NULL AUTO_INCREMENT,
+  `userId`    INT(11)     NOT NULL,
+  `commentId` INT(11)     NOT NULL,
+  `vote`      VARCHAR(16) NOT NULL,
+  PRIMARY KEY (`voteId`),
+  UNIQUE KEY `VOTE_IDX` (`userId`, `commentId`),
+  FOREIGN KEY (`commentId`) REFERENCES `comments` (`commentId`),
+  FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4

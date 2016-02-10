@@ -32,4 +32,17 @@ class Comments extends BaseController
         $this->succeed(array(KEY_COMMENT_ID => $commentId));
     }
 
+    function vote_get($commentId, $vote)
+    {
+        $user = $this->checkAndGetSessionUser();
+        if (!$user) {
+            return;
+        }
+        if ($this->checkIfNotInArray($vote, $this->voteArray())) {
+            return;
+        }
+        $this->commentDao->voteComment($user->userId, $commentId, $vote);
+        $this->succeed();
+    }
+
 }

@@ -20,9 +20,10 @@ func setUp() {
 }
 
 func cleanTables() {
-	tables := []string{"comments", "post_votes", "post_images", "posts", "images", "users"}
+	tables := []string{"comment_votes", "post_votes", "post_images", "posts", "images", "users"}
+	deleteTable("comments", true)
 	for _, table := range tables {
-		deleteTable(table)
+		deleteTable(table, false)
 	}
 	fmt.Println()
 }
@@ -56,21 +57,33 @@ func md5password(password string) string {
 	return fmt.Sprintf("%x", md5.Sum(data))
 }
 
-func deleteTable(table string) {
-	deleteRecord(table, "1", "1");
+func deleteTable(table string, noCheck bool) {
+	deleteRecord(table, "1", "1", noCheck);
 }
 
-func runSql(sentence string) {
+func runSql(sentence string, noCheck bool) {
 	db, err := sql.Open("mysql", "lzw:@/weimg")
 	checkErr(err)
 
 	err = db.Ping()
 	checkErr(err)
 
-	stmt, err := db.Prepare(sentence)
+	var stmt *sql.Stmt
+	var res sql.Result
+
+	if noCheck {
+		stmt, err = db.Prepare("SET FOREIGN_KEY_CHECKS=0")
+		checkErr(err)
+
+		res, err = stmt.Exec()
+		checkErr(err)
+	}
+
+
+	stmt, err = db.Prepare(sentence)
 	checkErr(err)
 
-	res, err := stmt.Exec()
+	res, err = stmt.Exec()
 	checkErr(err)
 
 	affect, err := res.RowsAffected()
@@ -78,12 +91,20 @@ func runSql(sentence string) {
 
 	fmt.Println(sentence, "affected", affect)
 
+	if noCheck {
+		stmt, err = db.Prepare("SET FOREIGN_KEY_CHECKS=1")
+		checkErr(err)
+
+		res, err = stmt.Exec()
+		checkErr(err)
+	}
+
 	db.Close()
 }
 
-func deleteRecord(table string, column string, id string) {
+func deleteRecord(table string, column string, id string, noCheck bool) {
 	sqlStr := fmt.Sprintf("delete from %s where %s=%s", table, column, id)
-	runSql(sqlStr)
+	runSql(sqlStr, noCheck)
 }
 
 func toInt(obj interface{}) (int) {

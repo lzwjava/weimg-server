@@ -52,11 +52,6 @@ class Posts extends BaseController
         $this->succeed($posts);
     }
 
-    private function voteArray()
-    {
-        return array(KEY_UP, KEY_DOWN);
-    }
-
     function vote_get($postId, $vote)
     {
         $user = $this->checkAndGetSessionUser();

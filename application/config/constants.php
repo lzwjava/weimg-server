@@ -176,3 +176,7 @@ define('KEY_COMMENT_ID', 'commentId');
 define('KEY_PARENT_ID', 'parentId');
 define('KEY_CONTENT', 'content');
 define('KEY_AUTHOR_ID', 'authorId');
+
+// comment_votes
+define('TABLE_COMMENT_VOTES', 'comment_votes');
+

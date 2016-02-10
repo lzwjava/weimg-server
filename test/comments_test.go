@@ -20,3 +20,18 @@ func TestComments_create(t *testing.T) {
 	assert.NotNil(t, res)
 	assert.NotNil(t, res["commentId"])
 }
+
+func addComment(c *Client, postId string) string {
+	res := c.postData("posts/" + postId + "/comments", url.Values{"content": {"大惊小怪"}})
+	commentId := floatToStr(res["commentId"])
+	return commentId
+}
+
+func TestComments_vote(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId := addImageAndPost(c)
+	commentId := addComment(c, postId)
+	res := c.getData("posts/" + postId + "/comments/" + commentId + "/vote/up", url.Values{})
+	assert.NotNil(t, res)
+}
