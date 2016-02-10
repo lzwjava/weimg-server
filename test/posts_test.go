@@ -70,6 +70,7 @@ func TestPost_list(t *testing.T) {
 	posts := c.getArrayData("posts", url.Values{"limit":{"2"}})
 	if len(posts) > 0 {
 		post := posts[0].(map[string]interface{})
+		assert.NotNil(t, post["commentCount"])
 		cover := post["cover"].(map[string]interface{})
 		assert.NotNil(t, cover["imageId"])
 		assert.NotNil(t, cover["width"])

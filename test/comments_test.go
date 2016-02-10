@@ -27,6 +27,15 @@ func addComment(c *Client, postId string) string {
 	return commentId
 }
 
+func TestComments_count(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId := addImageAndPost(c)
+	addComment(c, postId)
+	post := c.getData("posts/" + postId, url.Values{})
+	assert.True(t, toInt(post["commentCount"]) > 0)
+}
+
 func TestComments_vote(t *testing.T) {
 	setUp()
 	c := NewClient()

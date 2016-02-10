@@ -66,10 +66,12 @@ class PostDao extends BaseDao
         $fields = $this->publicFields();
         $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN vote='down' THEN 1 END) AS downs,
-                i.imageId,i.link,i.width,i.height
+                i.imageId,i.link,i.width,i.height,
+                count(commentId) as commentCount
                 FROM posts LEFT JOIN post_images USING(postId)
                 LEFT JOIN images as i  ON i.imageId = posts.cover
                 LEFT JOIN post_votes USING(postId)
+                LEFT JOIN comments as c USING(postId)
                 WHERE postId=? GROUP BY postId";
         $post = $this->db->query($sql, array($postId))->row();
         $this->setPostImages($post);
@@ -91,12 +93,16 @@ class PostDao extends BaseDao
     function getPostList($skip, $limit)
     {
         $fields = $this->publicFields();
-        $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
-                count(CASE WHEN vote='down' THEN 1 END) AS downs,
+        $sql = "SELECT $fields,count(CASE WHEN pv.vote='up' THEN 1 END) AS ups,
+                count(CASE WHEN pv.vote='down' THEN 1 END) AS downs,
+                count(commentId) as commentCount,
                 i.imageId,i.link,i.width,i.height
-                FROM posts LEFT JOIN post_images USING(postId)
+                FROM posts
+                LEFT JOIN post_images USING(postId)
                 LEFT JOIN images as i ON i.imageId = posts.cover
-                LEFT JOIN post_votes USING(postId) GROUP BY postId
+                LEFT JOIN post_votes as pv USING(postId)
+                LEFT JOIN comments as c USING(postId)
+                GROUP BY postId
                 order by score DESC limit $limit offset $skip";
         $posts = $this->db->query($sql)->result();
         $this->handlePosts($posts);
