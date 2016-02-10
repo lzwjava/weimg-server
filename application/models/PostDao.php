@@ -9,12 +9,15 @@
 class PostDao extends BaseDao
 {
     private $scoreHelper;
+    private $imageDao;
 
     function __construct()
     {
         parent::__construct();
         $this->load->helper('score');
+        $this->load->model('imageDao');
         $this->scoreHelper = new ScoreHelper();
+        $this->imageDao = new ImageDao();
     }
 
     function addPost($imageIds, $title, $author, $topic)
@@ -62,11 +65,27 @@ class PostDao extends BaseDao
     {
         $fields = $this->publicFields();
         $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
-                count(CASE WHEN vote='down' THEN 1 END) AS downs
+                count(CASE WHEN vote='down' THEN 1 END) AS downs,
+                i.imageId,i.link,i.width,i.height
                 FROM posts LEFT JOIN post_images USING(postId)
-                LEFT JOIN images USING(imageId) LEFT JOIN post_votes USING(postId)
+                LEFT JOIN images as i  ON i.imageId = posts.cover
+                LEFT JOIN post_votes USING(postId)
                 WHERE postId=? GROUP BY postId";
-        return $this->db->query($sql, array($postId))->row();
+        $post = $this->db->query($sql, array($postId))->row();
+        $this->setPostImages($post);
+        return $post;
+    }
+
+    function setPostImages($post)
+    {
+        if ($post == null) {
+            return $post;
+        }
+        $fields = $this->imageDao->publicFields();
+        $sql = "select $fields from post_images left join images using(imageId) where postId=?";
+        $binds = array($post->postId);
+        $images = $this->db->query($sql, $binds)->result();
+        $post->images = $images;
     }
 
     function getPostList($skip, $limit)

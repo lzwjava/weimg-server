@@ -69,3 +69,5 @@ $route['posts']['POST'] = 'posts/create';
 $route['posts/(\d+)']['GET'] = 'posts/fetch/$1';
 $route['posts']['GET'] = 'posts/list';
 $route['posts/(\d+)/vote/(up|down)'] = 'posts/vote/$1/$2';
+
+$route['posts/(\d+)/comments'] = 'comments/create/$1';

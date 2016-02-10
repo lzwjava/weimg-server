@@ -20,7 +20,7 @@ func setUp() {
 }
 
 func cleanTables() {
-	tables := []string{"post_votes", "post_images", "posts", "images", "users"}
+	tables := []string{"comments", "post_votes", "post_images", "posts", "images", "users"}
 	for _, table := range tables {
 		deleteTable(table)
 	}

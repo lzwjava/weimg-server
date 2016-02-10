@@ -9,6 +9,13 @@
 class ImageDao extends BaseDao
 {
 
+    function publicFields()
+    {
+        return $this->mergeFields(array(KEY_IMAGE_ID,
+            KEY_LINK, KEY_WIDTH, KEY_HEIGHT, KEY_AUTHOR, KEY_DESCRIPTION, KEY_CREATED),
+            TABLE_IMAGES);
+    }
+
     private function genImageId()
     {
         return getToken(6);

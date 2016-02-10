@@ -80,14 +80,16 @@ CREATE TABLE `post_votes` (
 
 DROP TABLE IF EXISTS `comments` /
 CREATE TABLE `comments` (
-  `commentId` INT(11)      NOT NULL AUTO_INCREMENT,
-  `postId`    INT(11),
+  `commentId` INT(11)      NOT NULL  AUTO_INCREMENT,
+  `postId`    INT(11)      NOT NULL,
   `parentId`  INT(11),
-  `comment`   VARCHAR(255) NOT NULL,
-  `author`    INT(11)      NOT NULL,
+  `content`   VARCHAR(511) NOT NULL,
+  `authorId`  INT(11)      NOT NULL,
+  `created`   TIMESTAMP    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`commentId`),
   FOREIGN KEY (`postId`) REFERENCES `posts` (`postId`),
-  FOREIGN KEY (`author`) REFERENCES `users` (`userId`)
+  FOREIGN KEY (`parentId`) REFERENCES `comments` (`commentId`),
+  FOREIGN KEY (`authorId`) REFERENCES `users` (`userId`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 /

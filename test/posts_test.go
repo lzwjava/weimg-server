@@ -12,7 +12,7 @@ func TestPosts_create(t *testing.T) {
 	setUp()
 	c := NewClient()
 	user := registerUser(c)
-	imageId := "abcdef";
+	imageId := imageId()
 	addImage(c, imageId)
 	res := addPost(c, imageId)
 	assert.NotNil(t, res)
@@ -26,6 +26,26 @@ func TestPosts_create(t *testing.T) {
 	assert.Equal(t, "搞笑", post["topic"]);
 	assert.NotNil(t, post["created"])
 	assert.NotNil(t, post["postId"])
+}
+
+func TestPosts_getOne(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId := addImageAndPost(c)
+	post := c.getData("posts/" + postId, url.Values{})
+	assert.NotNil(t, post)
+	images := post["images"].([]interface{})
+	assert.NotNil(t, images)
+	assert.True(t, len(images) > 0)
+}
+
+func addImageAndPost(c *Client) string {
+	registerUser(c)
+	imageId := imageId()
+	addImage(c, imageId)
+	res := addPost(c, imageId)
+	postId := floatToStr(res["postId"])
+	return postId
 }
 
 func addPost(c *Client, imageId string) map[string]interface{} {
@@ -61,15 +81,11 @@ func TestPost_list(t *testing.T) {
 func TestPost_vote(t *testing.T) {
 	setUp()
 	c := NewClient()
-	registerUser(c)
-	imageId := imageId()
-	addImage(c, imageId);
-	post := addPost(c, imageId);
-	postId := floatToStr(post["postId"]);
+	postId := addImageAndPost(c)
 	res := c.getData("posts/" + postId + "/vote/up", url.Values{})
 	assert.NotNil(t, res)
 
-	post = c.getData("posts/" + postId, url.Values{})
+	post := c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 1)
 	assert.Equal(t, toInt(post["downs"]), 0)
 

@@ -169,3 +169,10 @@ define('TABLE_POST_IMAGES', 'post_images');
 // post_votes
 define('TABLE_POST_VOTES', 'post_votes');
 define('KEY_VOTE', 'vote');
+
+// comments
+define('TABLE_COMMENTS', 'comments');
+define('KEY_COMMENT_ID', 'commentId');
+define('KEY_PARENT_ID', 'parentId');
+define('KEY_CONTENT', 'content');
+define('KEY_AUTHOR_ID', 'authorId');
