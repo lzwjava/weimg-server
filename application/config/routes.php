@@ -58,7 +58,7 @@ $route['self']['PATCH'] = 'users/update';
 $route['self']['GET'] = 'users/self';
 $route['users']['POST'] = 'users/register';
 $route['login']['POST'] = 'users/login';
-$route['requestSmsCode'] = 'users/requestSmsCode';
+$route['requestSmsCode']['POST'] = 'users/requestSmsCode';
 
 $route['files/uptoken']['GET'] = 'files/uptoken';
 
@@ -68,7 +68,8 @@ $route['images/(\w+)']['GET'] = 'images/fetch/$1';
 $route['posts']['POST'] = 'posts/create';
 $route['posts/(\d+)']['GET'] = 'posts/fetch/$1';
 $route['posts']['GET'] = 'posts/list';
-$route['posts/(\d+)/vote/(up|down)'] = 'posts/vote/$1/$2';
+$route['posts/(\d+)/vote/(up|down)']['GET'] = 'posts/vote/$1/$2';
 
-$route['posts/(\d+)/comments'] = 'comments/create/$1';
-$route['posts/(\d+)/comments/(\d+)/vote/(up|down)'] = 'comments/vote/$2/$3';
+$route['posts/(\d+)/comments']['POST'] = 'comments/create/$1';
+$route['posts/(\d+)/comments/(\d+)/vote/(up|down)']['GET'] = 'comments/vote/$2/$3';
+$route['posts/(\d+)/comments']['GET'] = 'comments/list/$1';

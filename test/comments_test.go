@@ -36,11 +36,25 @@ func TestComments_count(t *testing.T) {
 	assert.True(t, toInt(post["commentCount"]) > 0)
 }
 
+func addPostAndComment(c *Client) (string, string) {
+	postId := addImageAndPost(c)
+	commentId := addComment(c, postId)
+	return postId, commentId
+}
+
 func TestComments_vote(t *testing.T) {
 	setUp()
 	c := NewClient()
-	postId := addImageAndPost(c)
-	commentId := addComment(c, postId)
+	postId, commentId := addPostAndComment(c)
 	res := c.getData("posts/" + postId + "/comments/" + commentId + "/vote/up", url.Values{})
 	assert.NotNil(t, res)
+}
+
+func TestComments_list(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId, _ := addPostAndComment(c)
+	res := c.getArrayData("posts/" + postId + "/comments", url.Values{})
+	assert.NotNil(t, res)
+	assert.Equal(t, len(res), 1)
 }

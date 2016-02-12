@@ -45,4 +45,12 @@ class Comments extends BaseController
         $this->succeed();
     }
 
+    function list_get($postId)
+    {
+        $skip = $this->skip();
+        $limit = $this->limit();
+        $comments = $this->commentDao->getComments($postId, $skip, $limit);
+        $this->succeed($comments);
+    }
+
 }

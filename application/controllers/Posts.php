@@ -64,4 +64,5 @@ class Posts extends BaseController
         $this->postDao->votePost($user->userId, $postId, $vote);
         $this->succeed();
     }
+
 }
