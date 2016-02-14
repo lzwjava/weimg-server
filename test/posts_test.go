@@ -11,21 +11,12 @@ import (
 func TestPosts_create(t *testing.T) {
 	setUp()
 	c := NewClient()
-	user := registerUser(c)
+	registerUser(c)
 	imageId := imageId()
 	addImage(c, imageId)
 	res := addPost(c, imageId)
 	assert.NotNil(t, res)
 	assert.NotNil(t, res, res["postId"])
-
-	postId := floatToStr(res["postId"])
-	post := c.getData("posts/" + postId, url.Values{})
-	assert.NotNil(t, post)
-	assert.Equal(t, "Weird Person", post["title"])
-	assert.Equal(t, user["userId"], post["author"])
-	assert.Equal(t, "搞笑", post["topic"]);
-	assert.NotNil(t, post["created"])
-	assert.NotNil(t, post["postId"])
 }
 
 func TestPosts_getOne(t *testing.T) {
@@ -34,6 +25,17 @@ func TestPosts_getOne(t *testing.T) {
 	postId := addImageAndPost(c)
 	post := c.getData("posts/" + postId, url.Values{})
 	assert.NotNil(t, post)
+	assert.NotNil(t, post["author"])
+	assert.NotNil(t, post["postId"])
+	assert.NotNil(t, post["created"])
+	assert.NotNil(t, post["title"])
+	assert.NotNil(t, post["topic"])
+	assert.NotNil(t, post["score"])
+
+	author := post["author"].(map[string]interface{})
+	assert.NotNil(t, author["userId"])
+	assert.NotNil(t, author["username"])
+
 	assert.NotNil(t, post["points"])
 	images := post["images"].([]interface{})
 	assert.NotNil(t, images)
@@ -72,6 +74,10 @@ func TestPost_list(t *testing.T) {
 	if len(posts) > 0 {
 		post := posts[0].(map[string]interface{})
 		assert.NotNil(t, post["commentCount"])
+		assert.NotNil(t, post["author"])
+		author := post["author"].(map[string]interface{})
+		assert.NotNil(t, author)
+
 		cover := post["cover"].(map[string]interface{})
 		assert.NotNil(t, cover["imageId"])
 		assert.NotNil(t, cover["width"])

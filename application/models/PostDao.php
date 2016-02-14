@@ -67,11 +67,13 @@ class PostDao extends BaseDao
         $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN vote='down' THEN 1 END) AS downs,
                 i.imageId,i.link,i.width,i.height,
+                u.userId, u.username,
                 count(commentId) as commentCount
                 FROM posts LEFT JOIN post_images USING(postId)
                 LEFT JOIN images as i  ON i.imageId = posts.cover
                 LEFT JOIN post_votes USING(postId)
                 LEFT JOIN comments as c USING(postId)
+                LEFT JOIN users as u on u.userId = posts.author
                 WHERE postId=? GROUP BY postId";
         $post = $this->db->query($sql, array($postId))->row();
         $this->setPostImages($post);
@@ -99,12 +101,14 @@ class PostDao extends BaseDao
         $sql = "SELECT $fields,count(CASE WHEN pv.vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN pv.vote='down' THEN 1 END) AS downs,
                 count(commentId) as commentCount,
-                i.imageId,i.link,i.width,i.height
+                i.imageId,i.link,i.width,i.height,
+                u.userId, u.username
                 FROM posts
                 LEFT JOIN post_images USING(postId)
                 LEFT JOIN images as i ON i.imageId = posts.cover
                 LEFT JOIN post_votes as pv USING(postId)
                 LEFT JOIN comments as c USING(postId)
+                LEFT JOIN users as u on u.userId = posts.author
                 GROUP BY postId
                 order by score DESC limit $limit offset $skip";
         $posts = $this->db->query($sql)->result();
@@ -117,6 +121,8 @@ class PostDao extends BaseDao
         foreach ($posts as $post) {
             $cover = $this->extractFields($post, array(KEY_IMAGE_ID, KEY_LINK, KEY_WIDTH, KEY_HEIGHT));
             $post->cover = $cover;
+            $user = $this->extractFields($post, array(KEY_USER_ID, KEY_USERNAME));
+            $post->author = $user;
             $post->points = $post->ups - $post->downs;
         }
     }
