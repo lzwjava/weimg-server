@@ -1,4 +1,4 @@
-SET NAMES utf8 /
+SET NAMES utf8mb4 /
 
 CREATE DATABASE `weimg`
   DEFAULT CHARSET = utf8mb4

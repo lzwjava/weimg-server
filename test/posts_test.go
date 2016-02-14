@@ -34,6 +34,7 @@ func TestPosts_getOne(t *testing.T) {
 	postId := addImageAndPost(c)
 	post := c.getData("posts/" + postId, url.Values{})
 	assert.NotNil(t, post)
+	assert.NotNil(t, post["points"])
 	images := post["images"].([]interface{})
 	assert.NotNil(t, images)
 	assert.True(t, len(images) > 0)
@@ -89,6 +90,7 @@ func TestPost_vote(t *testing.T) {
 	post := c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 1)
 	assert.Equal(t, toInt(post["downs"]), 0)
+	assert.Equal(t, toInt(post["points"]), 1)
 
 	c.getData("posts/" + postId + "/vote/up", url.Values{})
 	post = c.getData("posts/" + postId, url.Values{})

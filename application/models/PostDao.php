@@ -75,6 +75,9 @@ class PostDao extends BaseDao
                 WHERE postId=? GROUP BY postId";
         $post = $this->db->query($sql, array($postId))->row();
         $this->setPostImages($post);
+        if ($post != null) {
+            $this->handlePosts(array($post));
+        }
         return $post;
     }
 
@@ -114,6 +117,7 @@ class PostDao extends BaseDao
         foreach ($posts as $post) {
             $cover = $this->extractFields($post, array(KEY_IMAGE_ID, KEY_LINK, KEY_WIDTH, KEY_HEIGHT));
             $post->cover = $cover;
+            $post->points = $post->ups - $post->downs;
         }
     }
 
