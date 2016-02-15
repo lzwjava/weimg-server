@@ -48,7 +48,7 @@ class PostDao extends BaseDao
         return $insertId;
     }
 
-    private function publicFields()
+    private function publicFields($tablePrefix = TABLE_POSTS)
     {
         return $this->mergeFields(array(
             KEY_POST_ID,
@@ -58,23 +58,31 @@ class PostDao extends BaseDao
             KEY_COVER,
             KEY_AUTHOR,
             KEY_CREATED
-        ), TABLE_POSTS);
+        ), $tablePrefix);
     }
 
-    function getPost($postId)
+    function getPost($user, $postId)
     {
-        $fields = $this->publicFields();
-        $sql = "SELECT $fields,count(CASE WHEN vote='up' THEN 1 END) AS ups,
-                count(CASE WHEN vote='down' THEN 1 END) AS downs,
+        $fields = $this->publicFields('p');
+        $userId = -1;
+        if ($user) {
+            $userId = $user->userId;
+        }
+        $sql = "SELECT $fields,
+                count(CASE WHEN pv.vote='up' THEN 1 END) AS ups,
+                count(CASE WHEN pv.vote='down' THEN 1 END) AS downs,
                 i.imageId,i.link,i.width,i.height,
+                upv.vote,
                 u.userId, u.username,
                 count(commentId) as commentCount
-                FROM posts LEFT JOIN post_images USING(postId)
-                LEFT JOIN images as i  ON i.imageId = posts.cover
-                LEFT JOIN post_votes USING(postId)
-                LEFT JOIN comments as c USING(postId)
-                LEFT JOIN users as u on u.userId = posts.author
-                WHERE postId=? GROUP BY postId";
+                FROM posts as p
+                LEFT JOIN post_images as pi ON pi.postId = p.postId
+                LEFT JOIN images as i ON i.imageId = p.cover
+                LEFT JOIN post_votes as pv on pv.postId = p.postId
+                LEFT JOIN post_votes as upv on upv.postId = p.postId and upv.userId = $userId
+                LEFT JOIN comments as c on c.postId = p.postId
+                LEFT JOIN users as u on u.userId = p.author
+                WHERE p.postId=? GROUP BY p.postId";
         $post = $this->db->query($sql, array($postId))->row();
         $this->setPostImages($post);
         if ($post != null) {
@@ -95,21 +103,26 @@ class PostDao extends BaseDao
         $post->images = $images;
     }
 
-    function getPostList($skip, $limit)
+    function getPostList($user, $skip, $limit)
     {
-        $fields = $this->publicFields();
+        $fields = $this->publicFields('p');
+        $userId = -1;
+        if ($user) {
+            $userId = $user->userId;
+        }
         $sql = "SELECT $fields,count(CASE WHEN pv.vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN pv.vote='down' THEN 1 END) AS downs,
+                upv.vote,
                 count(commentId) as commentCount,
                 i.imageId,i.link,i.width,i.height,
                 u.userId, u.username
-                FROM posts
-                LEFT JOIN post_images USING(postId)
-                LEFT JOIN images as i ON i.imageId = posts.cover
-                LEFT JOIN post_votes as pv USING(postId)
-                LEFT JOIN comments as c USING(postId)
-                LEFT JOIN users as u on u.userId = posts.author
-                GROUP BY postId
+                FROM posts as p
+                LEFT JOIN images as i ON i.imageId = p.cover
+                LEFT JOIN post_votes as pv on pv.postId = p.postId
+                LEFT JOIN post_votes as upv on upv.postId = p.postId and upv.userId = $userId
+                LEFT JOIN comments as c on c.postId = p.postId
+                LEFT JOIN users as u on u.userId = p.author
+                GROUP BY p.postId
                 order by score DESC limit $limit offset $skip";
         $posts = $this->db->query($sql)->result();
         $this->handlePosts($posts);

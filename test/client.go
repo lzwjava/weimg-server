@@ -120,7 +120,7 @@ func (c *Client) request(method string, path string, params url.Values) (map[str
 	}
 	checkErr(err)
 	if len(c.sessionToken) > 0 {
-		req.Header.Set("X-CR-Session", c.sessionToken)
+		req.Header.Set("X-Session", c.sessionToken)
 	}
 	if (c.admin) {
 		req.SetBasicAuth("admin", "Pwx9uVJM");

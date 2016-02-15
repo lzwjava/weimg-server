@@ -41,14 +41,17 @@ class Posts extends BaseController
 
     function fetch_get($postId)
     {
-        $this->succeed($this->postDao->getPost($postId));
+        $user = $this->getSessionUser();
+        $post = $this->postDao->getPost($user, $postId);
+        $this->succeed($post);
     }
 
     function list_get()
     {
+        $user = $this->getSessionUser();
         $skip = $this->skip();
         $limit = $this->limit();
-        $posts = $this->postDao->getPostList($skip, $limit);
+        $posts = $this->postDao->getPostList($user, $skip, $limit);
         $this->succeed($posts);
     }
 
