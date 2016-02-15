@@ -78,6 +78,9 @@ func TestPost_list(t *testing.T) {
 		author := post["author"].(map[string]interface{})
 		assert.NotNil(t, author)
 
+		_, ok := post["vote"]
+		assert.True(t, ok)
+
 		cover := post["cover"].(map[string]interface{})
 		assert.NotNil(t, cover["imageId"])
 		assert.NotNil(t, cover["width"])

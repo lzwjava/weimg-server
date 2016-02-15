@@ -76,11 +76,10 @@ class PostDao extends BaseDao
                 u.userId, u.username,
                 count(commentId) as commentCount
                 FROM posts as p
-                LEFT JOIN post_images as pi ON pi.postId = p.postId
                 LEFT JOIN images as i ON i.imageId = p.cover
-                LEFT JOIN post_votes as pv on pv.postId = p.postId
+                LEFT JOIN comments as c USING(postId)
+                LEFT JOIN post_votes as pv USING(postId)
                 LEFT JOIN post_votes as upv on upv.postId = p.postId and upv.userId = $userId
-                LEFT JOIN comments as c on c.postId = p.postId
                 LEFT JOIN users as u on u.userId = p.author
                 WHERE p.postId=? GROUP BY p.postId";
         $post = $this->db->query($sql, array($postId))->row();
@@ -118,9 +117,9 @@ class PostDao extends BaseDao
                 u.userId, u.username
                 FROM posts as p
                 LEFT JOIN images as i ON i.imageId = p.cover
-                LEFT JOIN post_votes as pv on pv.postId = p.postId
+                LEFT JOIN comments as c USING(postId)
+                LEFT JOIN post_votes as pv USING(postId)
                 LEFT JOIN post_votes as upv on upv.postId = p.postId and upv.userId = $userId
-                LEFT JOIN comments as c on c.postId = p.postId
                 LEFT JOIN users as u on u.userId = p.author
                 GROUP BY p.postId
                 order by score DESC limit $limit offset $skip";
