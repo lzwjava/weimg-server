@@ -57,4 +57,8 @@ func TestComments_list(t *testing.T) {
 	res := c.getArrayData("posts/" + postId + "/comments", url.Values{})
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res), 1)
+	comment := res[0].(map[string]interface{})
+	assert.NotNil(t, comment["author"])
+	assert.NotNil(t, comment["commentId"])
+	assert.NotNil(t, comment["postId"])
 }

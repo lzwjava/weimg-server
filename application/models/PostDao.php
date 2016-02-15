@@ -127,16 +127,6 @@ class PostDao extends BaseDao
         }
     }
 
-    private function extractFields($object, $fields)
-    {
-        $newObj = new StdClass();
-        foreach ($fields as $field) {
-            $newObj->$field = $object->$field;
-            unset($object->$field);
-        }
-        return $newObj;
-    }
-
     private function getVote($userId, $postId)
     {
         $sql = "SELECT vote FROM post_votes WHERE userId=? AND postId=?";
