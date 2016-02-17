@@ -50,7 +50,7 @@ class Users extends BaseController
         );
         $return = $this->leancloud->curlLeanCloud('requestSmsCode', $data);
         if ($return['status'] == 200) {
-            $this->succeed($return['result']);
+            $this->succeed();
         } else {
             $this->failure(ERROR_SMS_WRONG, $return['result']);
         }

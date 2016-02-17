@@ -4,8 +4,8 @@ from fabric.api import run, sudo, env, cd, local, prefix, put, lcd, settings
 from fabric.contrib.project import rsync_project
 from fabric.contrib.files import exists, sed
 
-server_dir = '/home/project/code-review-server'
-tmp_dir = '/tmp/code-review-server' + str(os.getpid()) + '/'
+server_dir = '/home/project/weimg-server'
+tmp_dir = '/tmp/weimg-server' + str(os.getpid()) + '/'
 
 def _set_user_dir():
 	global server_dir

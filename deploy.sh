@@ -1,1 +1,1 @@
-fab -H root@reviewcode.cn deploy
+fab -H root@test.reviewcode.cn deploy

@@ -1,5 +1,8 @@
 SET NAMES utf8mb4 /
 
+SHOW VARIABLES LIKE 'character_set_%' /
+SHOW VARIABLES LIKE 'collation_%' /
+
 CREATE DATABASE `weimg`
   DEFAULT CHARSET = utf8mb4
   DEFAULT COLLATE = utf8mb4_unicode_ci /
