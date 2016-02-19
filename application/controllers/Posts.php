@@ -51,7 +51,8 @@ class Posts extends BaseController
         $user = $this->getSessionUser();
         $skip = $this->skip();
         $limit = $this->limit();
-        $posts = $this->postDao->getPostList($user, $skip, $limit);
+        $sort = $this->sortValue(KEY_SCORE);
+        $posts = $this->postDao->getPostList($user, $skip, $limit, $sort);
         $this->succeed($posts);
     }
 

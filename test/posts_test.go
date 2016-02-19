@@ -57,8 +57,19 @@ func addPost(c *Client, imageId string) map[string]interface{} {
 	return c.postData("posts", url.Values{"imageIds":{imageIds}, "title":{"Weird Person"}, "topic":{"搞笑"}});
 }
 
+func addImageAndPost2(c *Client, imageId string) string {
+	addImage(c, imageId)
+	post := addPost(c, imageId)
+	postId := floatToStr(post["postId"])
+	return postId
+}
+
 func imageId() string {
 	return "2ypzvXw"
+}
+
+func imageId2() string {
+	return "EZZRag"
 }
 
 func TestPost_list(t *testing.T) {
@@ -119,4 +130,29 @@ func TestPost_vote(t *testing.T) {
 	post = c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 1)
 	assert.Equal(t, toInt(post["downs"]), 0)
+}
+
+func getPostId(post interface{}) string {
+	return floatToStr(post.(map[string]interface{})["postId"])
+}
+
+func TestPost_sort(t *testing.T) {
+	setUp()
+	c := NewClient()
+	registerUser(c)
+	post1Id := addImageAndPost2(c, imageId())
+	c.getData("posts/" + post1Id + "/vote/up", url.Values{})
+	time.Sleep(time.Second)
+	post2Id := addImageAndPost2(c, imageId2())
+
+	registerUser2(c)
+	c.getData("posts/" + post1Id + "/vote/up", url.Values{})
+
+	posts := c.getArrayData("posts", url.Values{"sort":{"created"}})
+	assert.Equal(t, getPostId(posts[0]), post2Id)
+	assert.Equal(t, getPostId(posts[1]), post1Id)
+
+	posts = c.getArrayData("posts", url.Values{"sort":{"score"}})
+	assert.Equal(t, getPostId(posts[0]), post1Id)
+	assert.Equal(t, getPostId(posts[1]), post2Id)
 }

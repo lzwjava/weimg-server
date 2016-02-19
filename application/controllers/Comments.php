@@ -49,7 +49,8 @@ class Comments extends BaseController
     {
         $skip = $this->skip();
         $limit = $this->limit();
-        $comments = $this->commentDao->getComments($postId, $skip, $limit);
+        $sort = $this->sortValue(KEY_POINTS);
+        $comments = $this->commentDao->getComments($postId, $skip, $limit, $sort);
         $this->succeed($comments);
     }
 

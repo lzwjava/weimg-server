@@ -114,6 +114,8 @@ define('KEY_SESSION_HEADER', 'X-Session');
 define('KEY_SKIP', 'skip');
 define('KEY_LIMIT', 'limit');
 
+define('KEY_SORT', 'sort');
+
 // users table
 define('KEY_MOBILE_PHONE_NUMBER', 'mobilePhoneNumber');
 define('KEY_AVATAR_URL', 'avatarUrl');
@@ -180,3 +182,4 @@ define('KEY_AUTHOR_ID', 'authorId');
 // comment_votes
 define('TABLE_COMMENT_VOTES', 'comment_votes');
 
+define('KEY_POINTS', 'points');

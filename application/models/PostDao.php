@@ -102,12 +102,13 @@ class PostDao extends BaseDao
         $post->images = $images;
     }
 
-    function getPostList($user, $skip, $limit)
+    function getPostList($user, $skip, $limit, $sort)
     {
         $fields = $this->publicFields('p');
-        $userId = -1;
         if ($user) {
             $userId = $user->userId;
+        } else {
+            $userId = -1;
         }
         $sql = "SELECT $fields,count(CASE WHEN pv.vote='up' THEN 1 END) AS ups,
                 count(CASE WHEN pv.vote='down' THEN 1 END) AS downs,
@@ -122,7 +123,7 @@ class PostDao extends BaseDao
                 LEFT JOIN post_votes as upv on upv.postId = p.postId and upv.userId = $userId
                 LEFT JOIN users as u on u.userId = p.author
                 GROUP BY p.postId
-                order by score DESC limit $limit offset $skip";
+                order by $sort DESC limit $limit offset $skip";
         $posts = $this->db->query($sql)->result();
         $this->handlePosts($posts);
         return $posts;

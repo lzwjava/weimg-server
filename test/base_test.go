@@ -34,17 +34,25 @@ func checkErr(err error) {
 	}
 }
 
-func registerUser(c *Client) map[string]interface{} {
-	res := c.post("users", url.Values{"mobilePhoneNumber": {"13261630925"},
-		"username": {"lzwjavaTest"}, "smsCode": {"5555"}, "password":{md5password("123456")}})
+func registerUserWithPhone(c *Client, mobilePhoneNumber string, username string) map[string]interface{} {
+	res := c.post("users", url.Values{"mobilePhoneNumber": {mobilePhoneNumber},
+		"username": {username}, "smsCode": {"5555"}, "password":{md5password("123456")}})
 	if (res["status"] == "success") {
 		registerRes := res["result"].(map[string]interface{})
 		c.sessionToken = registerRes["sessionToken"].(string)
 		return registerRes
 	} else {
-		loginRes := login(c, "13261630925", "123456")
+		loginRes := login(c, mobilePhoneNumber, "123456")
 		return loginRes
 	}
+}
+
+func registerUser(c *Client) map[string]interface{} {
+	return registerUserWithPhone(c, "13261630925", "lzwjavaTest")
+}
+
+func registerUser2(c *Client) map[string]interface{} {
+	return registerUserWithPhone(c, "18813106251", "满天星")
 }
 
 func login(c *Client, mobilePhoneNumber string, password string) map[string]interface{} {

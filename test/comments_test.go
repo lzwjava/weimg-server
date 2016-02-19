@@ -4,6 +4,7 @@ import (
 	"testing"
 	"net/url"
 	"github.com/stretchr/testify/assert"
+	"time"
 )
 
 func TestComments_create(t *testing.T) {
@@ -61,4 +62,32 @@ func TestComments_list(t *testing.T) {
 	assert.NotNil(t, comment["author"])
 	assert.NotNil(t, comment["commentId"])
 	assert.NotNil(t, comment["postId"])
+	assert.NotNil(t, comment["points"])
+	assert.NotNil(t, comment["ups"])
+	assert.NotNil(t, comment["downs"])
+	assert.NotNil(t, comment["created"])
+}
+
+
+func getCommentId(comment interface{}) string {
+	return floatToStr(comment.(map[string]interface{})["commentId"])
+}
+
+func TestComments_sort(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId, commentId1 := addPostAndComment(c)
+	time.Sleep(time.Second)
+	commentId2 := addComment(c, postId);
+
+	c.getData("posts/" + postId + "/comments/" + commentId1 + "/vote/up", url.Values{})
+
+	comments := c.getArrayData("posts/" + postId + "/comments", url.Values{"sort":{"created"}})
+
+	assert.Equal(t, getCommentId(comments[0]), commentId2)
+	assert.Equal(t, getCommentId(comments[1]), commentId1)
+
+	comments = c.getArrayData("posts/" + postId + "/comments", url.Values{"sort":{"points"}})
+	assert.Equal(t, getCommentId(comments[0]), commentId1)
+	assert.Equal(t, getCommentId(comments[1]), commentId2)
 }

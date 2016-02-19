@@ -81,10 +81,11 @@ class CommentDao extends BaseDao
         ), TABLE_COMMENTS);
     }
 
-    function getComments($postId, $skip, $limit)
+    function getComments($postId, $skip, $limit, $sort)
     {
         $fields = $this->publicFields();
-        $sql = "SELECT $fields, COUNT(CASE WHEN vote='up' THEN 1 END) as ups,
+        $sql = "SELECT *, ups-downs as points FROM (SELECT $fields,
+                COUNT(CASE WHEN vote='up' THEN 1 END) as ups,
                 COUNT(CASE WHEN vote='down' THEN 1 END) as downs,
                 u.userId,u.username
                 FROM comments
@@ -92,8 +93,7 @@ class CommentDao extends BaseDao
                 left join users as u on u.userId=comments.authorId
                 WHERE postId=?
                 group by commentId
-                order by ups desc
-                limit $limit offset $skip";
+                limit $limit offset $skip) as result order by $sort desc";
         $binds = array($postId);
         $comments = $this->db->query($sql, $binds)->result();
         $this->assembleComments($comments);
@@ -105,7 +105,7 @@ class CommentDao extends BaseDao
         foreach ($comments as $comment) {
             $comment->author = $this->extractFields($comment,
                 array(KEY_USER_ID, KEY_USERNAME));
-            $comment->points = $comment->ups - $comment->downs;
+            // $comment->points = $comment->ups - $comment->downs;
             unset($comment->authorId);
         }
     }

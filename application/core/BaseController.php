@@ -226,5 +226,19 @@ class BaseController extends REST_Controller
     {
         return array(KEY_UP, KEY_DOWN);
     }
+
+    protected function sortValue($default)
+    {
+        $sort = $this->get(KEY_SORT);
+        if ($sort == null) {
+            return $default;
+        } else {
+            if ($sort != $default && $sort != KEY_CREATED) {
+                return $default;
+            } else {
+                return $sort;
+            }
+        }
+    }
 }
 
