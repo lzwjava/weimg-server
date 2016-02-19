@@ -186,6 +186,7 @@ class PostDao extends BaseDao
         $post = $this->db->query($sql, $values)->row();
         $date = new DateTime($post->created);
         $hot = $this->scoreHelper->hot($post->ups, $post->downs, $date);
+        $this->db->where(KEY_POST_ID, $postId);
         $this->db->update(TABLE_POSTS, array(KEY_SCORE => $hot));
     }
 
