@@ -204,5 +204,7 @@ class PostDao extends BaseDao
         }
         $this->updateScore($postId);
         $this->db->trans_complete();
+        $newVote = $this->getVote($userId, $postId);
+        return $newVote;
     }
 }

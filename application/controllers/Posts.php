@@ -65,8 +65,8 @@ class Posts extends BaseController
         if ($this->checkIfNotInArray($vote, $this->voteArray())) {
             return;
         }
-        $this->postDao->votePost($user->userId, $postId, $vote);
-        $this->succeed();
+        $newVote = $this->postDao->votePost($user->userId, $postId, $vote);
+        $this->succeed(array(KEY_VOTE => $newVote));
     }
 
 }

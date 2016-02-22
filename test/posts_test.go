@@ -40,6 +40,12 @@ func TestPosts_getOne(t *testing.T) {
 	images := post["images"].([]interface{})
 	assert.NotNil(t, images)
 	assert.True(t, len(images) > 0)
+	image := images[0].(map[string]interface{})
+	assert.NotNil(t, image["description"])
+	assert.NotNil(t, image["width"])
+	assert.NotNil(t, image["height"])
+	assert.NotNil(t, image["link"])
+	assert.NotNil(t, image["imageId"])
 }
 
 func addImageAndPost(c *Client) string {
@@ -104,17 +110,20 @@ func TestPost_vote(t *testing.T) {
 	setUp()
 	c := NewClient()
 	postId := addImageAndPost(c)
-	post := c.getData("posts/" + postId + "/vote/up", url.Values{})
-	assert.NotNil(t, post)
-	assert.Nil(t, post["vote"])
+	up := c.getData("posts/" + postId + "/vote/up", url.Values{})
+	assert.NotNil(t, up)
+	assert.Equal(t, "up", up["vote"])
 
-	post = c.getData("posts/" + postId, url.Values{})
+	post := c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 1)
 	assert.Equal(t, toInt(post["downs"]), 0)
 	assert.Equal(t, toInt(post["points"]), 1)
 	assert.Equal(t, "up", post["vote"])
 
-	c.getData("posts/" + postId + "/vote/up", url.Values{})
+	up = c.getData("posts/" + postId + "/vote/up", url.Values{})
+	assert.NotNil(t, up)
+	assert.Nil(t, up["vote"])
+
 	post = c.getData("posts/" + postId, url.Values{})
 	assert.Equal(t, toInt(post["ups"]), 0)
 	assert.Equal(t, toInt(post["downs"]), 0)

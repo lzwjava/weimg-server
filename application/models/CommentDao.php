@@ -71,6 +71,8 @@ class CommentDao extends BaseDao
             $this->updateVote($userId, $commentId, $newVote);
         }
         $this->db->trans_complete();
+        $newVote = $this->getVote($userId, $commentId);
+        return $newVote;
     }
 
     private function publicFields()

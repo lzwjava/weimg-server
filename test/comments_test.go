@@ -49,6 +49,7 @@ func TestComments_vote(t *testing.T) {
 	postId, commentId := addPostAndComment(c)
 	res := c.getData("posts/" + postId + "/comments/" + commentId + "/vote/up", url.Values{})
 	assert.NotNil(t, res)
+	assert.Equal(t, res["vote"], "up")
 }
 
 func TestComments_list(t *testing.T) {
@@ -67,7 +68,6 @@ func TestComments_list(t *testing.T) {
 	assert.NotNil(t, comment["downs"])
 	assert.NotNil(t, comment["created"])
 }
-
 
 func getCommentId(comment interface{}) string {
 	return floatToStr(comment.(map[string]interface{})["commentId"])

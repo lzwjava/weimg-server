@@ -41,8 +41,8 @@ class Comments extends BaseController
         if ($this->checkIfNotInArray($vote, $this->voteArray())) {
             return;
         }
-        $this->commentDao->voteComment($user->userId, $commentId, $vote);
-        $this->succeed();
+        $newVote = $this->commentDao->voteComment($user->userId, $commentId, $vote);
+        $this->succeed(array(KEY_VOTE => $newVote));
     }
 
     function list_get($postId)
