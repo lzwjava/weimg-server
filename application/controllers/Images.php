@@ -79,5 +79,4 @@ class Images extends BaseController
         $this->succeed($this->imageDao->getImage($imageId));
     }
 
-
 }
