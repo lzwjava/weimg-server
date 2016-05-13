@@ -36,19 +36,14 @@ class Crawler extends BaseController
         return null;
     }
 
-    private function removeQuotes($value)
-    {
-        return substr($value, 1, strlen($value) - 2);
-    }
-
-    private function printContent1($html)
+    private function printContent($html)
     {
         $dom = new Dom();
         $dom->load($html);
         $allItems = $dom->find('div.WB_cardwrap');
         foreach ($allItems as $item) {
             $node = $item->find('div[node-type="feed_list_content"]')[0];
-            logInfo($node->text());
+            logInfo(trim($node->text()));
             $medias = $item->find('div.WB_media_wrap');
             if ($medias->count() > 0) {
                 $media = $medias[0];
@@ -70,10 +65,10 @@ class Crawler extends BaseController
 
     function crawl_get()
     {
-        $resp = $this->downloader->download('http://weibo.com/1823630913/DvmtweSBE');
+        $resp = $this->downloader->download('http://weibo.com/2189743085/Dvl4YnF7t');
         $replace = $this->processHtml($resp);
         logInfo($replace);
-        $this->printContent1($replace);
+        $this->printContent($replace);
         $this->succeed();
     }
 }
