@@ -28,6 +28,13 @@ func addComment(c *Client, postId string) string {
 	return commentId
 }
 
+func addChildComment(c *Client, postId string, commentId string) string {
+	res := c.postData("posts/" + postId + "/comments", url.Values{
+		"content": {"有什么好大惊小怪？"}, "parentId":{commentId}})
+	newId := floatToStr(res["commentId"])
+	return newId
+}
+
 func TestComments_count(t *testing.T) {
 	setUp()
 	c := NewClient()
@@ -90,4 +97,17 @@ func TestComments_sort(t *testing.T) {
 	comments = c.getArrayData("posts/" + postId + "/comments", url.Values{"sort":{"points"}})
 	assert.Equal(t, getCommentId(comments[0]), commentId1)
 	assert.Equal(t, getCommentId(comments[1]), commentId2)
+}
+
+func TestComments_children(t *testing.T) {
+	setUp()
+	c := NewClient()
+	postId, commentId1 := addPostAndComment(c)
+	newId := addChildComment(c, postId, commentId1)
+	res := c.getArrayData("posts/" + postId + "/comments", url.Values{})
+	assert.Equal(t, len(res), 1)
+	children := (res[0].(map[string]interface{}))["children"]
+	assert.NotNil(t, children)
+	child := (children.([]interface{})[0]).(map[string]interface{})
+	assert.Equal(t, floatToStr(child["commentId"]), newId)
 }

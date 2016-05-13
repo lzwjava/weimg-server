@@ -99,7 +99,30 @@ class CommentDao extends BaseDao
         $binds = array($postId);
         $comments = $this->db->query($sql, $binds)->result();
         $this->assembleComments($comments);
+        $comments = $this->makeCommentTree($comments);
         return $comments;
+    }
+
+    private function makeCommentTree($comments)
+    {
+        $newComments = array();
+        foreach ($comments as $comment) {
+            if (!$comment->parentId) {
+                $comment->children = array();
+                $newComments[] = $comment;
+            }
+        }
+        foreach ($comments as $comment) {
+            if ($comment->parentId) {
+                foreach ($newComments as $newComment) {
+                    if ($newComment->commentId == $comment->parentId) {
+                        array_push($newComment->children, $comment);
+                        break;
+                    }
+                }
+            }
+        }
+        return $newComments;
     }
 
     private function assembleComments($comments)
