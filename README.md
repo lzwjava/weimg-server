@@ -1,52 +1,37 @@
-# code-review-server
+## weimg-server
 
-Deploy: fab -H root@reviewcode.cn deploy
+WeImg is your ultimate destination for discovering the most hilarious memes, adorable pets in sweaters, mind-blowing science facts, hidden video game Easter eggs, and everything else that makes the internet so entertaining. Get ready to add a whole new level of fun to your phone!
 
-Install dependencies: composer install, composer update
+Welcome to weimg-server! This repository contains the backend components for powering a dynamic web application. Below is a brief overview of the directory structure and key components of the project:
 
-# API
+### Directories:
 
-### 快速参考
+- **cache**: Contains cached files used for optimizing performance.
+- **config**: Stores configuration files for various aspects of the application such as database settings, routes, and constants.
+- **controllers**: Houses PHP controllers responsible for handling incoming requests and generating responses.
+- **core**: Contains core PHP classes and controllers fundamental to the application's functionality.
+- **helpers**: Stores PHP helper functions and utilities used throughout the application.
+- **hooks**: Placeholder directory for implementing custom hooks and callbacks.
+- **id**: [No description provided]
+- **language**: Contains language files for internationalization support, currently only supporting English.
+- **libraries**: Stores custom PHP libraries and third-party dependencies used in the application.
+- **logs**: Placeholder directory for storing application logs.
+- **models**: Houses PHP models representing data entities and interacting with the database.
+- **third_party**: Placeholder directory for third-party libraries or modules.
 
-描述 |方法|请求  |参数|返回
------|----|------|----|----
-发送验证码|POST|/user/requestSmsCode|mobilePhoneNumber|
-注册|POST|/user/register|mobilePhoneNumber,username,smsCode,password,type| 注册的用户
-登录|POST|/user/login |mobilePhoneNumber,password|登录用户
-更新用户信息|PATCH|/user|company,jobTitle,gitHubUsername,introduction,avatarUrl,maxOrders...|更新后的用户
-获取当前用户|GET|/user/self||当前用户
-移除领域|DELETE| /user/tags/:tagId|| 剩余的 tags 数组
-添加领域|POST|/user/tags |tagId| 当前 tags 数组
-创建审核订单|POST|/orders|gitHubUrl,remark,reviewerId,codeLines|新创建的订单
-查看我的订单|GET|/user/orders|status,skip,limit|订单数组
-查看一个订单|GET|/orders/:orderId||
-接手订单|POST|/orders/:orderId | status=consented |
-拒绝订单|POST|/orders/:orderId | status=rejected |
-打赏|POST|orders/:orderId/reward|amount
-七牛token|GET|/qiniu/token||
-大神列表|GET|/reviewers |skip,limit|
-查看一个大神|GET|/reviewers/:reviewerId||
-创建审核|POST|/reviews|orderId,content,title|
-更新审核|PATCH|/reviews/:reviewId|content,title|
-精选审核案例|GET|/reviews | displaying,skip,limit|
-一个大神的审核案例|GET|/reviewers/:reviewerId/reviews | skip,limit|
-记录案例页阅读数|POST|/reviews/:reviewId/visits|referrer|
-获取视频列表|GET|/videos||
-记录视频访问次数|POST|/videos/:videoId/visits|referrer|
+### Files:
 
+- **index.html**: Default landing page for the server project.
+- **test.php**: A PHP script for testing purposes.
+- **welcome_message.php**: PHP script generating a welcome message for the application's homepage.
 
-## user
+### How to Use:
 
-移除用户擅长或想学领域
+1. Ensure that PHP is installed on your server environment.
+2. Configure the settings in the `config` directory, especially `config.php` and `database.php`, according to your environment.
+3. Utilize the controllers in the `controllers` directory to define application logic and handle HTTP requests.
+4. Interact with the database using the models defined in the `models` directory.
+5. Customize and extend the functionality of the application by adding new controllers, models, libraries, and helpers as needed.
+6. Refer to the `views` directory for HTML templates and error pages.
 
-```
-DELETE /user/tags/10
-```
-
-返回剩余的 tags 数组
-
-```
-{"code":0,"result":[],"error":""}
-```
-=======
-
+Feel free to explore the project further and contribute enhancements or report any issues you encounter. Happy coding!
